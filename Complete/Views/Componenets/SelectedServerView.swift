@@ -67,8 +67,8 @@ class SelectedServerView: UIView
         NSLayoutConstraint.activate([
             flagImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             flagImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            flagImageView.widthAnchor.constraint(equalToConstant: 30),
-            flagImageView.heightAnchor.constraint(equalToConstant: 30),
+            flagImageView.widthAnchor.constraint(equalToConstant: 28),
+            flagImageView.heightAnchor.constraint(equalToConstant: 28),
             
             cityStateLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             cityStateLabel.leadingAnchor.constraint(equalTo: flagImageView.trailingAnchor, constant: 16),
@@ -86,7 +86,7 @@ class SelectedServerView: UIView
         ])
 
         // Make flag circular after setting up constraints
-        flagImageView.layer.cornerRadius = 15
+        flagImageView.layer.cornerRadius = 14
         flagImageView.clipsToBounds = true
     }
 

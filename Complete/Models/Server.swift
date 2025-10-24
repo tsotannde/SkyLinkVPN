@@ -1,3 +1,11 @@
+//
+//  Server.swift
+//  SkyLink
+//
+//  Created by Adebayo Sotannde on 10/23/25.
+//
+
+
 struct Server: Codable, Identifiable
 {
     var id: String { name }

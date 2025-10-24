@@ -8,7 +8,10 @@
 
 import Foundation
 
-extension Notification.Name {
+extension Notification.Name
+{
     static let serverDidUpdate = Notification.Name("serverDidUpdate")
     static let configurationDidChange = Notification.Name("configurationDidChange")
+    static let internetDidConnect = Notification.Name("internetDidConnect")
+    static let internetDidDisconnect = Notification.Name("internetDidDisconnect")
 }

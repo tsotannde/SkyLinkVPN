@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     // iOS default lifecycle behavior is acceptable since no overrides are needed.
     private let configureFirebase: Void =
     {
+        InternetManager.shared.startMonitoring()
         FirebaseApp.configure() //Configure Firebase
     }()
 }

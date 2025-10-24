@@ -7,10 +7,11 @@
 
 import UIKit
 
-final class FlagManager {
+final class FlagManager
+{
     static let shared = FlagManager()
 
-    /// Mapping of country names to their ISO 3166-1 alpha-2 codes.
+    //Mapping of country names to their ISO 3166-1 alpha-2 codes.
     private let countryCodeMap: [String: String] = [
         "Afghanistan": "af", "Aland Islands": "ax", "Albania": "al", "Algeria": "dz",
         "American Samoa": "as", "Andorra": "ad", "Angola": "ao", "Anguilla": "ai",
@@ -87,8 +88,9 @@ final class FlagManager {
         "United Nations": "un", "Unknown": "xx", "Wales": "gb-wls"
     ]
 
-    /// Returns the flag image for a given country name.
-    func getCountryFlagImage(_ countryName: String) -> UIImage? {
+    //Returns the flag image for a given country name.
+    func getCountryFlagImage(_ countryName: String) -> UIImage?
+    {
         guard let code = countryCodeMap[countryName] else { return nil }
         return UIImage(named: code)
     }

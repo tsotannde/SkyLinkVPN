@@ -14,6 +14,20 @@
 		8B9F51732E948C80005EA0D0 /* WireGuardKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8B9F51722E948C80005EA0D0 /* WireGuardKit */; };
 		8BE5BFBA2E9786D7003DDC65 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 8BE5BFB92E9786D7003DDC65 /* FirebaseFirestore */; };
 		8BE5BFC22E97C292003DDC65 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BE5BFC12E97C292003DDC65 /* FirebaseFunctions */; };
+		EE2D38412EAA97810010A30E /* ConfigurationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D38102EAA97810010A30E /* ConfigurationManager.swift */; };
+		EE2D38432EAA97810010A30E /* KeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D38122EAA97810010A30E /* KeyManager.swift */; };
+		EE2D38442EAA97810010A30E /* NavigationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D38132EAA97810010A30E /* NavigationManager.swift */; };
+		EE2D38452EAA97810010A30E /* ServerFetcherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D38142EAA97810010A30E /* ServerFetcherManager.swift */; };
+		EE2D38462EAA97810010A30E /* SubscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D38152EAA97810010A30E /* SubscriptionManager.swift */; };
+		EE2D38482EAA97810010A30E /* ServerDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D381D2EAA97810010A30E /* ServerDatabase.swift */; };
+		EE2D384A2EAA97810010A30E /* SelectedServerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D38212EAA97810010A30E /* SelectedServerView.swift */; };
+		EE2D38502EAA97810010A30E /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D382B2EAA97810010A30E /* HomeViewController.swift */; };
+		EE2D38512EAA97810010A30E /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D382C2EAA97810010A30E /* SplashViewController.swift */; };
+		EE2D38752EAAD4990010A30E /* FlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D38732EAAD4990010A30E /* FlagManager.swift */; };
+		EE2D387C2EAADB970010A30E /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D387B2EAADB970010A30E /* Server.swift */; };
+		EE2D387E2EAADBA40010A30E /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D387D2EAADBA40010A30E /* Country.swift */; };
+		EE2D38802EABE6CF0010A30E /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D387F2EABE6CF0010A30E /* AccountManager.swift */; };
+		EE2D38822EABF0390010A30E /* Home+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D38812EABF0390010A30E /* Home+UI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +59,20 @@
 		8B9F515C2E948C05005EA0D0 /* network-extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "network-extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B9F515E2E948C05005EA0D0 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
 		8B9F517C2E9491FB005EA0D0 /* libwg-go.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwg-go.a"; path = "../Wireguardkit-main-2/libwg-go.a"; sourceTree = "<group>"; };
+		EE2D38102EAA97810010A30E /* ConfigurationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationManager.swift; sourceTree = "<group>"; };
+		EE2D38122EAA97810010A30E /* KeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyManager.swift; sourceTree = "<group>"; };
+		EE2D38132EAA97810010A30E /* NavigationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationManager.swift; sourceTree = "<group>"; };
+		EE2D38142EAA97810010A30E /* ServerFetcherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerFetcherManager.swift; sourceTree = "<group>"; };
+		EE2D38152EAA97810010A30E /* SubscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionManager.swift; sourceTree = "<group>"; };
+		EE2D381D2EAA97810010A30E /* ServerDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerDatabase.swift; sourceTree = "<group>"; };
+		EE2D38212EAA97810010A30E /* SelectedServerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedServerView.swift; sourceTree = "<group>"; };
+		EE2D382B2EAA97810010A30E /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		EE2D382C2EAA97810010A30E /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		EE2D38732EAAD4990010A30E /* FlagManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagManager.swift; sourceTree = "<group>"; };
+		EE2D387B2EAADB970010A30E /* Server.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
+		EE2D387D2EAADBA40010A30E /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
+		EE2D387F2EABE6CF0010A30E /* AccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
+		EE2D38812EABF0390010A30E /* Home+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Home+UI.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -118,6 +146,7 @@
 		8B9F51372E948BE0005EA0D0 = {
 			isa = PBXGroup;
 			children = (
+				EE2D38762EAAD4AD0010A30E /* Complete */,
 				8B9F51422E948BE0005EA0D0 /* SkyLink */,
 				8B9F51602E948C05005EA0D0 /* network-extension */,
 				8B9F515D2E948C05005EA0D0 /* Frameworks */,
@@ -141,6 +170,83 @@
 				8B9F515E2E948C05005EA0D0 /* NetworkExtension.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EE2D38762EAAD4AD0010A30E /* Complete */ = {
+			isa = PBXGroup;
+			children = (
+				EE2D38772EAAD57B0010A30E /* Managers */,
+				EE2D387A2EAADB7D0010A30E /* Models */,
+				EE2D38852EABF8870010A30E /* Views */,
+				EE2D387F2EABE6CF0010A30E /* AccountManager.swift */,
+				EE2D38152EAA97810010A30E /* SubscriptionManager.swift */,
+				EE2D38102EAA97810010A30E /* ConfigurationManager.swift */,
+			);
+			path = Complete;
+			sourceTree = "<group>";
+		};
+		EE2D38772EAAD57B0010A30E /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				EE2D38122EAA97810010A30E /* KeyManager.swift */,
+				EE2D38732EAAD4990010A30E /* FlagManager.swift */,
+				EE2D38142EAA97810010A30E /* ServerFetcherManager.swift */,
+				EE2D38132EAA97810010A30E /* NavigationManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		EE2D387A2EAADB7D0010A30E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				EE2D387B2EAADB970010A30E /* Server.swift */,
+				EE2D381D2EAA97810010A30E /* ServerDatabase.swift */,
+				EE2D387D2EAADBA40010A30E /* Country.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		EE2D38852EABF8870010A30E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				EE2D38862EABF8940010A30E /* Componenets */,
+				EE2D38872EAC00C80010A30E /* Controller */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		EE2D38862EABF8940010A30E /* Componenets */ = {
+			isa = PBXGroup;
+			children = (
+				EE2D38212EAA97810010A30E /* SelectedServerView.swift */,
+			);
+			path = Componenets;
+			sourceTree = "<group>";
+		};
+		EE2D38872EAC00C80010A30E /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				EE2D38882EAC00D70010A30E /* Splash */,
+				EE2D388A2EAC01F90010A30E /* Home */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		EE2D38882EAC00D70010A30E /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				EE2D382C2EAA97810010A30E /* SplashViewController.swift */,
+			);
+			path = Splash;
+			sourceTree = "<group>";
+		};
+		EE2D388A2EAC01F90010A30E /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				EE2D38812EABF0390010A30E /* Home+UI.swift */,
+				EE2D382B2EAA97810010A30E /* HomeViewController.swift */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -286,6 +392,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE2D38752EAAD4990010A30E /* FlagManager.swift in Sources */,
+				EE2D38802EABE6CF0010A30E /* AccountManager.swift in Sources */,
+				EE2D38822EABF0390010A30E /* Home+UI.swift in Sources */,
+				EE2D38412EAA97810010A30E /* ConfigurationManager.swift in Sources */,
+				EE2D38432EAA97810010A30E /* KeyManager.swift in Sources */,
+				EE2D38442EAA97810010A30E /* NavigationManager.swift in Sources */,
+				EE2D38452EAA97810010A30E /* ServerFetcherManager.swift in Sources */,
+				EE2D387C2EAADB970010A30E /* Server.swift in Sources */,
+				EE2D38462EAA97810010A30E /* SubscriptionManager.swift in Sources */,
+				EE2D38482EAA97810010A30E /* ServerDatabase.swift in Sources */,
+				EE2D384A2EAA97810010A30E /* SelectedServerView.swift in Sources */,
+				EE2D38502EAA97810010A30E /* HomeViewController.swift in Sources */,
+				EE2D38512EAA97810010A30E /* SplashViewController.swift in Sources */,
+				EE2D387E2EAADBA40010A30E /* Country.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

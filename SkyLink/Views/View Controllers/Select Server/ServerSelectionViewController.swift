@@ -2,157 +2,161 @@
 //  ServerSelectionViewController.swift
 //  SkyLink
 //
-//  Created by Adebayo Sotannde on 10/22/25.
+//  Created by Adebayo Sotannde on 10/24/25.
 //
-
 
 import UIKit
 
-//
-//  ServerSelectionViewController.swift
-//  SkyLink
-//
-//  Created by Adebayo Sotannde on 10/22/25.
-//
+final class ServerSelectionViewController: UIViewController {
 
-//import UIKit
-//
-//final class ServerSelectionViewController: UIViewController {
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        print("Hello, world!")
-//        view.backgroundColor = .systemBackground
-//    }
-//}
-
-
-
-
-import UIKit
-
-class ServerSelectionViewController: UIViewController
-{
-    
+    // MARK: - UI Elements
     private var titleLabel: UILabel!
     private var searchContainerView: UIView!
     private var tableView: UITableView!
+
+    // MARK: - Data
     private var expandedCountries = Set<IndexPath>()
     private var freeCountries: [Country] = []
     private var premiumCountries: [Country] = []
-    
     private var visibleRows: [VisibleRow] = []
-    
-    
-    override func viewDidLoad()
-    {
+
+    // MARK: - Lifecycle
+    override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "#F7F7F9")
+        view.backgroundColor = DesignSystem.AppColors.backgroundcolor
         constructUI()
         setupTableView()
-        
+        setupTapToDismiss()
+
+        Task { await loadData() }
+    }
+
+    private func setupTapToDismiss() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
-        
     }
-    
-    override func viewWillAppear(_ animated: Bool)
-    {
-        super.viewWillAppear(animated)
-      
-    }
-   
-    private func constructUI()
-    {
-        // Create and add title label
-        titleLabel = createTitleLabel()
-        view.addSubview(titleLabel)
 
-        // Create and add search container view
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
+
+    // MARK: - Data Loading
+    private func loadData() async {
+        do {
+            try await ConfigurationManager.shared.loadServers()
+            freeCountries = buildCountries(from: ConfigurationManager.shared.freeServers, requiresSub: false)
+            premiumCountries = buildCountries(from: ConfigurationManager.shared.premiumServers, requiresSub: true)
+            rebuildVisibleRows(for: nil)
+            DispatchQueue.main.async { self.tableView.reloadData() }
+        } catch {
+            print("❌ Failed to load servers: \(error)")
+        }
+    }
+
+    private func buildCountries(from servers: [Server], requiresSub: Bool) -> [Country] {
+        var grouped: [String: [Server]] = [:]
+        for server in servers {
+            let countryName = server.country ?? "Unknown"
+            grouped[countryName, default: []].append(server)
+        }
+
+        return grouped.map {
+            Country(
+                name: $0.key,
+                requiresSubscription: requiresSub,
+                servers: Dictionary(uniqueKeysWithValues: $0.value.map { ($0.name, $0) })
+            )
+        }.sorted { $0.name ?? "" < $1.name ?? "" }
+    }
+
+    // MARK: - Visible Rows Builder
+    private func rebuildVisibleRows(for indexPath: IndexPath?) {
+        visibleRows.removeAll()
+
+        for (section, countries) in [freeCountries, premiumCountries].enumerated() {
+            for (row, country) in countries.enumerated() {
+                let countryIndexPath = IndexPath(row: row, section: section)
+                visibleRows.append(VisibleRow(type: .country(country), section: section))
+                if expandedCountries.contains(countryIndexPath) {
+                    let servers = Array(country.servers.values)
+                    for server in servers {
+                        visibleRows.append(VisibleRow(type: .server(server), section: section))
+                    }
+                }
+            }
+        }
+    }
+
+    // MARK: - UI Construction
+    private func constructUI() {
+        titleLabel = createTitleLabel()
         searchContainerView = createSearchContainerView()
+
+        view.addSubview(titleLabel)
         view.addSubview(searchContainerView)
 
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            //titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
 
             searchContainerView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
             searchContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             searchContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24)
         ])
     }
-    
-    private func setupTableView()
-    {
+
+    private func setupTableView() {
         tableView = UITableView(frame: .zero, style: .plain)
-        tableView.delegate = self
-        tableView.dataSource = self
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
-       
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        
-        //Register Cells
+        tableView.delegate = self
+        tableView.dataSource = self
         tableView.register(CountryCell.self, forCellReuseIdentifier: "ServerViewCell")
         tableView.register(ServerCell.self, forCellReuseIdentifier: "IndividualServerCell")
-        
+
         view.insertSubview(tableView, belowSubview: searchContainerView)
-        
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: searchContainerView.bottomAnchor, constant: 0),
+            tableView.topAnchor.constraint(equalTo: searchContainerView.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-    
-    @objc private func dismissKeyboard()
-    {
-        view.endEditing(true)
-    }
 }
 
+// MARK: - TableView Handling
+extension ServerSelectionViewController: UITableViewDelegate, UITableViewDataSource {
 
-
-extension ServerSelectionViewController: UITableViewDelegate, UITableViewDataSource
-{
-    
     private struct VisibleRow {
-        enum RowType {
-            case country(Country)
-            case server(Server)
-        }
+        enum RowType { case country(Country), server(Server) }
         let type: RowType
         let section: Int
     }
-    
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
-    }
+
+    func numberOfSections(in tableView: UITableView) -> Int { 2 }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            // Free section visible rows
-            return visibleRows.filter { $0.section == 0 }.count
-        } else {
-            // Premium section visible rows
-            return visibleRows.filter { $0.section == 1 }.count
-        }
+        visibleRows.filter { $0.section == section }.count
     }
 
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String?
-    {
-        return section == 0 ? "FREE LOCATIONS" : "PREMIUM LOCATIONS"
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        section == 0 ? "FREE LOCATIONS" : "PREMIUM LOCATIONS"
     }
 
-    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let header = view as? UITableViewHeaderFooterView else { return }
+        header.textLabel?.font = UIFont(name: "Sora-SemiBold", size: 12)
+        header.textLabel?.textColor = .gray
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { 80 }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let sectionVisibleRows = visibleRows.filter { $0.section == indexPath.section }
-        let visibleRow = sectionVisibleRows[indexPath.row]
-        
+        let sectionRows = visibleRows.filter { $0.section == indexPath.section }
+        let visibleRow = sectionRows[indexPath.row]
+
         switch visibleRow.type {
         case .country(let country):
             let cell = tableView.dequeueReusableCell(withIdentifier: "ServerViewCell", for: indexPath) as! CountryCell
@@ -168,7 +172,7 @@ extension ServerSelectionViewController: UITableViewDelegate, UITableViewDataSou
             )
             cell.configure(with: model)
             return cell
-            
+
         case .server(let server):
             let cell = tableView.dequeueReusableCell(withIdentifier: "IndividualServerCell", for: indexPath) as! ServerCell
             let flag = FlagManager.shared.getCountryFlagImage(server.country ?? "") ?? UIImage(systemName: "globe")
@@ -177,44 +181,21 @@ extension ServerSelectionViewController: UITableViewDelegate, UITableViewDataSou
                 city: server.city ?? "Unknown City",
                 state: server.state ?? "Unknown",
                 totalCapacity: server.capacity,
-                currentPeers: server.currentCapacity, showCrown: true
+                currentPeers: server.currentCapacity,
+                showCrown: server.requiresSubscription
             )
             cell.configure(with: model)
             return cell
         }
     }
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
-    }
-
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int)
-    {
-        guard let header = view as? UITableViewHeaderFooterView else { return }
-        header.textLabel?.font = UIFont(name: "Sora-SemiBold", size: 12) ?? .systemFont(ofSize: 12, weight: .semibold)
-        header.textLabel?.textColor = UIColor.gray
-    }
-    
-
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let sectionVisibleRows = visibleRows.filter { $0.section == indexPath.section }
-        let visibleRow = sectionVisibleRows[indexPath.row]
+        let sectionRows = visibleRows.filter { $0.section == indexPath.section }
+        let visibleRow = sectionRows[indexPath.row]
 
         switch visibleRow.type {
         case .country(let country):
             guard let cell = tableView.cellForRow(at: indexPath) as? CountryCell else { return }
-            
-          
-            
-            
-            // Delay deselection until UIKit finishes highlight
-            DispatchQueue.main.async {
-                tableView.deselectRow(at: indexPath, animated: false)
-                cell.selectionStyle = .none
-                cell.setHighlighted(false, animated: false)
-                cell.setSelected(false, animated: false)
-            }
 
             let isExpanding = !expandedCountries.contains(indexPath)
             if isExpanding {
@@ -224,44 +205,58 @@ extension ServerSelectionViewController: UITableViewDelegate, UITableViewDataSou
             }
             cell.setExpanded(isExpanding)
 
-            // Get servers for this country
             let servers = Array(country.servers.values)
             let section = indexPath.section
 
-            tableView.performBatchUpdates({
-                // Rebuild visibleRows before updating the UI
-                //rebuildVisibleRows(for: indexPath)
+            // Get current index of this country in visibleRows
+            guard let baseIndex = visibleRows.firstIndex(where: {
+                if case .country(let c) = $0.type { return c.name == country.name }
+                return false
+            }) else { return }
 
-                if isExpanding {
-                    let newIndexPaths = (0..<servers.count).map {
-                        IndexPath(row: indexPath.row + 1 + $0, section: section)
-                    }
-                    tableView.insertRows(at: newIndexPaths, with: .fade)
-                } else {
-                    let removeIndexPaths = (0..<servers.count).map {
-                        IndexPath(row: indexPath.row + 1 + $0, section: section)
-                    }
-                    tableView.deleteRows(at: removeIndexPaths, with: .fade)
+            // Update visibleRows safely
+            if isExpanding {
+                let newRows = servers.map { VisibleRow(type: .server($0), section: section) }
+                visibleRows.insert(contentsOf: newRows, at: baseIndex + 1)
+
+                let newIndexPaths = (0..<servers.count).map {
+                    IndexPath(row: indexPath.row + 1 + $0, section: section)
                 }
-            }, completion: nil)
+                tableView.performBatchUpdates {
+                    tableView.insertRows(at: newIndexPaths, with: .fade)
+                }
+            } else {
+                let countToRemove = servers.count
+                visibleRows.removeSubrange((baseIndex + 1)...(baseIndex + countToRemove))
+                let removedIndexPaths = (0..<countToRemove).map {
+                    IndexPath(row: indexPath.row + 1 + $0, section: section)
+                }
+                tableView.performBatchUpdates {
+                    tableView.deleteRows(at: removedIndexPaths, with: .fade)
+                }
+            }
 
         case .server(let server):
-            print("✅ Selected: \(server.city ?? "Unknown City"), \(server.state ?? "Unknown State") [\(server.publicIP ?? "Unavailable")]")
+            print("✅ Selected: \(server.city ?? "Unknown City"), \(server.state ?? "Unknown State") [\(server.publicIP ?? "N/A")]")
+
+            if let data = try? JSONEncoder().encode(server)
+            {
+                UserDefaults.standard.set(data, forKey: "currentServer")
+            }
+            ConfigurationManager.shared.saveSelectedServer(server)
+            NotificationCenter.default.post(name: .serverDidUpdate, object: nil)
+            dismiss(animated: true)
         }
     }
 }
 
-
-
-extension ServerSelectionViewController
-{
-    private func createTitleLabel() -> UILabel
-    {
+// MARK: - UI Builders
+extension ServerSelectionViewController {
+    private func createTitleLabel() -> UILabel {
         let label = UILabel()
         label.text = "Choose server location"
-        label.font = UIFont(name: "Sora-SemiBold", size: 20) ?? .systemFont(ofSize: 16, weight: .semibold)
+        label.font = UIFont(name: "Sora-SemiBold", size: 20)
         label.textColor = UIColor(named: "SkyLinkBlack")
-        label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }
@@ -277,47 +272,30 @@ extension ServerSelectionViewController
         container.layer.shadowRadius = 8
         container.heightAnchor.constraint(equalToConstant: 60).isActive = true
 
-        // --- Inner components ---
-
-        // Search text field
         let searchTextField = UITextField()
         searchTextField.placeholder = "Search location"
-        searchTextField.font = UIFont(name: "Sora-Regular", size: 16) ?? .systemFont(ofSize: 16)
-        searchTextField.textColor = UIColor(named: "Neutral500") ?? UIColor.systemGray
-        searchTextField.borderStyle = .none
-        searchTextField.backgroundColor = .clear
+        searchTextField.font = UIFont(name: "Sora-Regular", size: 16)
+        searchTextField.textColor = UIColor(named: "Neutral500") ?? .systemGray
         searchTextField.translatesAutoresizingMaskIntoConstraints = false
 
-        // Search icon
         let searchIcon = UIImageView(image: UIImage(systemName: "magnifyingglass"))
-        searchIcon.tintColor = UIColor(named: "Neutral500") ?? UIColor.systemGray
+        searchIcon.tintColor = UIColor(named: "Neutral500") ?? .systemGray
         searchIcon.translatesAutoresizingMaskIntoConstraints = false
-        searchIcon.contentMode = .scaleAspectFit
 
-        // Add subviews
         container.addSubview(searchTextField)
         container.addSubview(searchIcon)
 
         NSLayoutConstraint.activate([
-            // Icon
             searchIcon.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16),
             searchIcon.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             searchIcon.widthAnchor.constraint(equalToConstant: 16),
             searchIcon.heightAnchor.constraint(equalToConstant: 16),
 
-            // TextField
             searchTextField.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
             searchTextField.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             searchTextField.trailingAnchor.constraint(equalTo: searchIcon.leadingAnchor, constant: -12)
         ])
 
-        // Make container tappable to focus the text field
-        let tapGesture = UITapGestureRecognizer(target: searchTextField, action: #selector(UITextField.becomeFirstResponder))
-        container.addGestureRecognizer(tapGesture)
-
         return container
     }
 }
-
-
-

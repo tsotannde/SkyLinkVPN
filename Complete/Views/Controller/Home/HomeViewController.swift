@@ -34,11 +34,22 @@ class HomeViewController: UIViewController
     }
     
    
-    override func viewWillAppear(_ animated: Bool)
-    {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print("View Had appeared again")
         
+        // Add listener for when server changes
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateSelectedServerView),
+            name: .serverDidUpdate,
+            object: nil
+        )
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: .serverDidUpdate, object: nil)
     }
   
     
@@ -131,12 +142,13 @@ extension HomeViewController
         print("Stop button tapped")
     }
 
-    @objc func signOutButtonTapped() {
+    @objc func signOutButtonTapped()
+    {
         try? Auth.auth().signOut()
         print("User signed out")
     }
     
-    func updateSelectedServerView()
+    @objc func updateSelectedServerView()
     {
         Task {
             // Get server from ConfigurationManager

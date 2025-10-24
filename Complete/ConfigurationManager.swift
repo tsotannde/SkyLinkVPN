@@ -7,81 +7,113 @@
 
 import Foundation
 
-final class ConfigurationManager {
+final class ConfigurationManager
+{
 
     static let shared = ConfigurationManager()
     private init() {}
 
-    private let userDefaults = UserDefaults.standard
-    private let cachedServerKey = "cachedServers"
-    private let currentServerKey = "currentServer"
+    public var freeServers: [Server] = []
+    public var premiumServers: [Server] = []
 
-    // MARK: - Save and Load
-    func saveCurrentServer(_ server: Server) {
-        do {
-            let data = try JSONEncoder().encode(server)
-            userDefaults.set(data, forKey: currentServerKey)
-            print("💾 Saved current server: \(server.name)")
-        } catch {
-            print("❌ Failed to save current server: \(error.localizedDescription)")
+    func loadServers() async throws
+    {
+        guard let data = ServerFetcherManager.shared.getCachedJSON() else
+        {
+            print("No cached JSON found. Ensure fetchServers() was called before loading servers.")
+            return
         }
+
+        freeServers = getFreeServers(with: data)
+        premiumServers = getPaidServers(with: data)
+
+        print("Loaded \(freeServers.count) free servers and \(premiumServers.count) premium servers.")
     }
 
-    func loadCurrentServer() -> Server? {
-        guard let data = userDefaults.data(forKey: currentServerKey) else { return nil }
-        return try? JSONDecoder().decode(Server.self, from: data)
-    }
+    private func getFreeServers(with jsonData: Data) -> [Server]
+    {
+        guard let decoded = try? JSONDecoder().decode(ServerDatabase.self, from: jsonData) else
+        {
+            print("Failed to decode server database for free servers.")
+            return []
+        }
 
-    // MARK: - Load Cached Servers
-    func loadCachedServers() -> [Server]? {
-        guard let data = userDefaults.data(forKey: cachedServerKey) else { return nil }
-        return try? JSONDecoder().decode([Server].self, from: data)
-    }
-
-    // MARK: - Choose Random Server
-    func chooseRandomServer(isSubscribed: Bool, completion: @escaping (Server?) -> Void) {
-        // Attempt to use cached servers first
-        if let cachedServers = loadCachedServers() {
-            let eligible = cachedServers.filter { isSubscribed || !$0.requiresSubscription }
-
-            if let randomServer = eligible.randomElement() {
-                print("🎯 Selected random cached server: \(randomServer.name)")
-                saveCurrentServer(randomServer)
-                completion(randomServer)
-                return
-            } else {
-                print("⚠️ No eligible cached servers found. Fetching from network...")
+        let servers = decoded.servers.flatMap
+        { (_, country) in
+            country.servers.compactMap
+            { (_, server) in
+                country.requiresSubscription == false ? server : nil
             }
         }
+        return servers
+    }
 
-        // Fallback — fetch from Firebase
-//        ServerFetcherManager.shared.fetchServers { result in
-//            switch result {
-//            case .success(let servers):
-//                let eligible = servers.filter { isSubscribed || !$0.requiresSubscription }
-//
-//                if let randomServer = eligible.randomElement() {
-//                    print("✅ Selected random fetched server: \(randomServer.name)")
-//                    self.saveCurrentServer(randomServer)
-//                    completion(randomServer)
-//                } else {
-//                    print("❌ No suitable servers found after fetching.")
-//                    completion(nil)
-//                }
-//
-//            case .failure(let error):
-//                print("❌ Failed to fetch servers: \(error.localizedDescription)")
-//                completion(nil)
-//            }
+    private func getPaidServers(with jsonData: Data) -> [Server]
+    {
+        guard let decoded = try? JSONDecoder().decode(ServerDatabase.self, from: jsonData) else
+        {
+            print("Failed to decode server database for paid servers.")
+            return []
+        }
+
+        let servers = decoded.servers.flatMap
+        { (_, country) in
+            country.servers.compactMap
+            { (_, server) in
+                country.requiresSubscription == true ? server : nil
+            }
+        }
+        return servers
+    }
+    
+    func getOrSelectServer() async -> Server?
+    {
+        // Step 1: Try loading an existing saved server
+        if let data = UserDefaults.standard.data(forKey: "currentServer"),
+           let savedServer = try? JSONDecoder().decode(Server.self, from: data)
+        {
+            print("Loaded previously selected server: \(savedServer.name)")
+            return savedServer
+        }
+
+        // Step 2: No saved server found — load servers
+        do
+        {
+            try await loadServers()
+        } catch
+        {
+            print("Failed to load servers: \(error)")
+            return nil
+        }
+
+        // Step 3: Check subscription status
+        let isSubscribed = SubscriptionManager.shared.isSubcribed()
+
+        // Step 4: Select a server from the correct pool
+        let availableServers = isSubscribed ? premiumServers : freeServers
+        guard let selectedServer = availableServers.randomElement() else {
+            print("No servers available for selection.")
+            return nil
+        }
+
+        // Step 5: Save selected server to UserDefaults
+        if let data = try? JSONEncoder().encode(selectedServer)
+        {
+            UserDefaults.standard.set(data, forKey: "currentServer")
+            print("Saved new selected server: \(selectedServer.name)")
+        }
+
+        // Step 6: Return the selected server
+        return selectedServer
+    }
+    
+    func saveSelectedServer(_ server: Server) {
+        if let data = try? JSONEncoder().encode(server) {
+            UserDefaults.standard.set(data, forKey: "currentServer")
+            print("✅ Saved selected server: \(server.name)")
+            
+            // Notify any observers that the selected server changed
+            NotificationCenter.default.post(name: .serverDidUpdate, object: server)
         }
     }
-
-    // MARK: - Refresh Server Data
-    func refreshServerData(completion: @escaping (Bool) -> Void)
-    {
-//        ServerFetcherManager.shared.refreshServerData { success in
-//            print(success ? "✅ ConfigurationManager refresh success." : "❌ ConfigurationManager refresh failed.")
-//            completion(success)
-//        }
-    }
-
+}
