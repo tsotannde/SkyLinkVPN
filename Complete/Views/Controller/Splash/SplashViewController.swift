@@ -34,33 +34,19 @@ class SplashViewController: UIViewController
             return
         }
         
-        ServerFetcherManager.shared.fetchServers()
-        KeyManager.shared.generateKeysIfNeeded(for: <#T##String#>)
-        do {
-            // Step 1: Fetch servers
-            try await ServerFetcherManager.shared.fetchServers()
-            
-            // Step 2: Handle Firebase user
-            if let user = Auth.auth().currentUser {
-                print("✅ Existing Firebase user: \(user.uid)")
-                KeyManager.shared.verifyOrGenerateKeys(for: user.uid)
-            } else {
-                print("🆕 No Firebase user found — signing in anonymously.")
-                _ = try await Auth.auth().signInAnonymously()
-            }
-            
-            // Step 3: Choose random server
-            if let server = await ConfigurationManager.shared.chooseRandomServer(isSubscribed: false)
-            {
-                print("🎯 Selected server: \(server.name)")
-            }
-            
-            // Step 4: Navigate to main app
-            let home = HomeViewController()
-            UIApplication.shared.windows.first?.rootViewController = mainVC
-            
-        } catch {
-            print("❌ Error during startup: \(error.localizedDescription)")
+        do
+        {
+            try await ServerFetcherManager.shared.fetchServers() // Fetch Servers + Save to JSON
+            _ = try await AccountManager.shared.ensureAccountExists() // Check or create anonymous account
+            KeyManager.shared.generateKeysIfNeeded()  // Generate keys if none exist
+            let temp = await ConfigurationManager.shared.getOrSelectServer() // Choose a random server
+            print("Chosen Server is \(temp)")
+            NaviagateHome() // Navigate Home
+        }
+        catch
+        {
+                #warning("Fix this Genral error handling")
+                showNoInternetAlert() //Something Bad Happened
         }
     }
  
@@ -81,6 +67,11 @@ extension SplashViewController
            
         alert.addAction(retryAction)
         present(alert, animated: true)
+    }
+    
+    private func NaviagateHome()
+    {
+        NavigationManager.shared.navigate(to: HomeViewController(),on: navigationController,clearStack: true,animation: .fade)
     }
 }
 
