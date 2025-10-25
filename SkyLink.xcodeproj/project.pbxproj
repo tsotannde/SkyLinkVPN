@@ -21,6 +21,7 @@
 		EE2D38462EAA97810010A30E /* SubscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D38152EAA97810010A30E /* SubscriptionManager.swift */; };
 		EE2D38482EAA97810010A30E /* ServerDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D381D2EAA97810010A30E /* ServerDatabase.swift */; };
 		EE2D384A2EAA97810010A30E /* SelectedServerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D38212EAA97810010A30E /* SelectedServerView.swift */; };
+		EE2D384F2EAA97810010A30E /* ServerSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D38292EAA97810010A30E /* ServerSelectionViewController.swift */; };
 		EE2D38502EAA97810010A30E /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D382B2EAA97810010A30E /* HomeViewController.swift */; };
 		EE2D38512EAA97810010A30E /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D382C2EAA97810010A30E /* SplashViewController.swift */; };
 		EE2D38752EAAD4990010A30E /* FlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D38732EAAD4990010A30E /* FlagManager.swift */; };
@@ -28,6 +29,8 @@
 		EE2D387E2EAADBA40010A30E /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D387D2EAADBA40010A30E /* Country.swift */; };
 		EE2D38802EABE6CF0010A30E /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D387F2EABE6CF0010A30E /* AccountManager.swift */; };
 		EE2D38822EABF0390010A30E /* Home+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D38812EABF0390010A30E /* Home+UI.swift */; };
+		EE2D388D2EAC1B1E0010A30E /* VPNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D388C2EAC1B1E0010A30E /* VPNManager.swift */; };
+		EE2D388F2EAC331B0010A30E /* FirebaseRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D388E2EAC331B0010A30E /* FirebaseRequestManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +69,7 @@
 		EE2D38152EAA97810010A30E /* SubscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionManager.swift; sourceTree = "<group>"; };
 		EE2D381D2EAA97810010A30E /* ServerDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerDatabase.swift; sourceTree = "<group>"; };
 		EE2D38212EAA97810010A30E /* SelectedServerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedServerView.swift; sourceTree = "<group>"; };
+		EE2D38292EAA97810010A30E /* ServerSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectionViewController.swift; sourceTree = "<group>"; };
 		EE2D382B2EAA97810010A30E /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		EE2D382C2EAA97810010A30E /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		EE2D38732EAAD4990010A30E /* FlagManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagManager.swift; sourceTree = "<group>"; };
@@ -73,6 +77,8 @@
 		EE2D387D2EAADBA40010A30E /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
 		EE2D387F2EABE6CF0010A30E /* AccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
 		EE2D38812EABF0390010A30E /* Home+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Home+UI.swift"; sourceTree = "<group>"; };
+		EE2D388C2EAC1B1E0010A30E /* VPNManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNManager.swift; sourceTree = "<group>"; };
+		EE2D388E2EAC331B0010A30E /* FirebaseRequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseRequestManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -180,6 +186,8 @@
 				EE2D38852EABF8870010A30E /* Views */,
 				EE2D387F2EABE6CF0010A30E /* AccountManager.swift */,
 				EE2D38152EAA97810010A30E /* SubscriptionManager.swift */,
+				EE2D388C2EAC1B1E0010A30E /* VPNManager.swift */,
+				EE2D388E2EAC331B0010A30E /* FirebaseRequestManager.swift */,
 				EE2D38102EAA97810010A30E /* ConfigurationManager.swift */,
 			);
 			path = Complete;
@@ -228,6 +236,7 @@
 			children = (
 				EE2D38882EAC00D70010A30E /* Splash */,
 				EE2D388A2EAC01F90010A30E /* Home */,
+				EE2D388B2EAC179C0010A30E /* Server Selection */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -247,6 +256,14 @@
 				EE2D382B2EAA97810010A30E /* HomeViewController.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		EE2D388B2EAC179C0010A30E /* Server Selection */ = {
+			isa = PBXGroup;
+			children = (
+				EE2D38292EAA97810010A30E /* ServerSelectionViewController.swift */,
+			);
+			path = "Server Selection";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -394,6 +411,7 @@
 			files = (
 				EE2D38752EAAD4990010A30E /* FlagManager.swift in Sources */,
 				EE2D38802EABE6CF0010A30E /* AccountManager.swift in Sources */,
+				EE2D388F2EAC331B0010A30E /* FirebaseRequestManager.swift in Sources */,
 				EE2D38822EABF0390010A30E /* Home+UI.swift in Sources */,
 				EE2D38412EAA97810010A30E /* ConfigurationManager.swift in Sources */,
 				EE2D38432EAA97810010A30E /* KeyManager.swift in Sources */,
@@ -403,8 +421,10 @@
 				EE2D38462EAA97810010A30E /* SubscriptionManager.swift in Sources */,
 				EE2D38482EAA97810010A30E /* ServerDatabase.swift in Sources */,
 				EE2D384A2EAA97810010A30E /* SelectedServerView.swift in Sources */,
+				EE2D384F2EAA97810010A30E /* ServerSelectionViewController.swift in Sources */,
 				EE2D38502EAA97810010A30E /* HomeViewController.swift in Sources */,
 				EE2D38512EAA97810010A30E /* SplashViewController.swift in Sources */,
+				EE2D388D2EAC1B1E0010A30E /* VPNManager.swift in Sources */,
 				EE2D387E2EAADBA40010A30E /* Country.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import NetworkExtension
 
 class HomeViewController: UIViewController
 {
@@ -135,11 +136,23 @@ extension HomeViewController
     }
     @objc func startButtonTapped()
     {
-        print("Start button tapped")
+        print("Starting VPN...")
+        
+        Task
+        {
+            await VPNManager.shared.startTunnel()
+        }
     }
 
-    @objc func stopButtonTapped() {
-        print("Stop button tapped")
+    @objc func stopButtonTapped()
+    {
+        print("Stopping VPN…")
+        Task
+        {
+            await  VPNManager.shared.stopTunnel()
+        }
+        
+      
     }
 
     @objc func signOutButtonTapped()

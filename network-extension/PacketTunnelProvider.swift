@@ -5,51 +5,6 @@
 //  Created by Developer on 10/6/25.
 //
 
-//import NetworkExtension
-//
-//class PacketTunnelProvider: NEPacketTunnelProvider {
-//
-//    override func startTunnel(options: [String : NSObject]?, completionHandler: @escaping (Error?) -> Void) {
-//        print("Im attempting to start the tunnel")
-//
-//        // ✅ Add this line here:
-//        print("🔥 PacketTunnelProvider: startTunnel() CALLED!")
-//
-//        // ✅ Tell iOS that the tunnel started successfully (for testing)
-//        completionHandler(nil)
-//    }
-//    
-//    override func stopTunnel(with reason: NEProviderStopReason, completionHandler: @escaping () -> Void) {
-//        print("I will stop")
-//        completionHandler()
-//    }
-//    
-//    override func handleAppMessage(_ messageData: Data, completionHandler: ((Data?) -> Void)?) {
-//        print("Cool Message bro")
-//        if let handler = completionHandler {
-//            handler(messageData)
-//        }
-//    }
-//    
-//    override func sleep(completionHandler: @escaping () -> Void) {
-//        print("sleeping bor")
-//        completionHandler()
-//    }
-//    
-//    override func wake() {
-//        print("waking up bro")
-//    }
-//}
-//
-
-
-
-
-//  PacketTunnelProvider.swift
-//  network-extension
-//
-//  Created by Shahzain Ali on 23/03/2024.
-
 
 import NetworkExtension
 import WireGuardKit
