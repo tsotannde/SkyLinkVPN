@@ -21,11 +21,12 @@ final class FirebaseRequestManager {
     private let functions = Functions.functions()
     
     /// Sends request to Firebase and returns structured server response
-    func sendRequest(serverIP: String, publicKey: String) async throws -> ServerResponse
+    func sendRequest(serverIP: String, serverPort: Int, publicKey: String) async throws -> ServerResponse
     {
         do {
             let result = try await functions.httpsCallable("requestIPAddress").call([
                 "serverIP": serverIP,
+                "serverPort": serverPort,
                 "publicKey": publicKey
             ])
             
@@ -37,7 +38,9 @@ final class FirebaseRequestManager {
                 )
             }
 
-            // ✅ Match keys exactly with Firebase function response
+            print("Full Firebase Response:", data)
+
+            // Match keys exactly with Firebase function response
             guard let ip = data["ip"] as? String,
                   let serverPubKey = data["serverPublicKey"] as? String,
                   let port = data["port"] as? Int else {
@@ -48,7 +51,7 @@ final class FirebaseRequestManager {
                 )
             }
 
-            print("✅ Received from Firebase — IP: \(ip), PubKey: \(serverPubKey), Port: \(port)")
+            print("Received from Firebase — IP: \(ip), PubKey: \(serverPubKey), Port: \(port)")
             return ServerResponse(ip: ip, publicKey: serverPubKey, port: port)
         } catch {
             print("❌ Firebase error: \(error.localizedDescription)")

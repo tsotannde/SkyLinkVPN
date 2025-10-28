@@ -20,7 +20,7 @@ final class VPNManager {
         do {
             print("[VPNManager] Starting tunnel...")
 
-            // 1️⃣ Get or select the server
+            // Get or select the server
             guard let server = await ConfigurationManager.shared.getOrSelectServer() else {
                 print("No server found.")
                 return
@@ -31,7 +31,7 @@ final class VPNManager {
                 return
             }
 
-            // 2️⃣ Generate keys or load stored ones
+            // Generate keys or load stored ones
             guard let privateKey = KeyManager.shared.getPrivateKey() else {
                 print("Private key is nil.")
                 return
@@ -41,15 +41,16 @@ final class VPNManager {
                 return
             }
 
-            // 3️⃣ Call Firebase to get assigned IP, server pubkey, and port
+            // Call Firebase to get assigned IP, server pubkey, and port
             let response = try await FirebaseRequestManager.shared.sendRequest(
                 serverIP: serverIP,
+                serverPort: server.port ?? 5000,
                 publicKey: publicKey
             )
 
             print("[VPNManager] Received IP: \(response.ip), Port: \(response.port)")
 
-            // 4️⃣ Build wg-quick configuration string
+            // Build wg-quick configuration string
             let wgQuickConfig = """
             [Interface]
             PrivateKey = \(privateKey)
@@ -64,14 +65,14 @@ final class VPNManager {
             """
             print("[VPNManager] Final Config:\n\(wgQuickConfig)")
 
-            // 5️⃣ Load or create the Tunnel Provider
+            // Load or create the Tunnel Provider
             let tunnelManager = try await loadOrCreateTunnelProvider()
             tunnelManager.protocolConfiguration = makeProtocolConfig(wgQuickConfig: wgQuickConfig)
             tunnelManager.localizedDescription = "SkyLink VPN"
             tunnelManager.isEnabled = true
             try await tunnelManager.saveToPreferences()
 
-            // 6️⃣ Start the tunnel
+            // Start the tunnel
             try await tunnelManager.connection.startVPNTunnel()
             self.manager = tunnelManager
             print("VPN Tunnel Started Successfully")
@@ -105,11 +106,52 @@ final class VPNManager {
         return newManager
     }
 
-    private func makeProtocolConfig(wgQuickConfig: String) -> NETunnelProviderProtocol {
+    private func makeProtocolConfig(wgQuickConfig: String) -> NETunnelProviderProtocol
+    {
         let proto = NETunnelProviderProtocol()
         proto.providerBundleIdentifier = "com.adebayosotannde.SkyLink.network-extension"
         proto.serverAddress = "SkyLink VPN"
         proto.providerConfiguration = ["wgQuickConfig": wgQuickConfig]
         return proto
+    }
+}
+
+// MARK: - VPN Status Check
+extension VPNManager
+{
+    func isConnectedToVPN() async -> Bool
+    {
+        do {
+            // 1. Get the currently selected server
+            guard let currentServer = await ConfigurationManager.shared.getOrSelectServer(),
+                  let serverIP = currentServer.publicIP else {
+                print("[VPNManager] No saved server or public IP.")
+                return false
+            }
+
+            // 2. Fetch user's current public IP
+            guard let url = URL(string: "https://api.ipify.org?format=json") else {
+                print("[VPNManager] Invalid IPify URL.")
+                return false
+            }
+
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let ipResponse = try JSONDecoder().decode(IPResponse.self, from: data)
+            let userIP = ipResponse.ip
+
+            print("[VPNManager] User IP: \(userIP), Server IP: \(serverIP)")
+
+            // 3. Compare and return result
+            return userIP == serverIP
+
+        } catch {
+            print("[VPNManager] Failed to check VPN connection: \(error.localizedDescription)")
+            return false
+        }
+    }
+
+    // Helper struct for decoding ipify JSON
+    private struct IPResponse: Decodable {
+        let ip: String
     }
 }

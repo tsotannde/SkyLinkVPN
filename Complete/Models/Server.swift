@@ -6,8 +6,7 @@
 //
 
 
-struct Server: Codable, Identifiable
-{
+struct Server: Codable, Identifiable {
     var id: String { name }
     let name: String
     let nickname: String?
@@ -22,4 +21,5 @@ struct Server: Codable, Identifiable
     let currentCapacity: Int
     let lastUpdated: String
     let allowNewConnection: Bool?
+    let port: Int?
 }
