@@ -303,6 +303,31 @@ extension HomeViewController
             uploadCard.heightAnchor.constraint(equalToConstant: 80)
         ])
 
+        // Status + Timer labels stack
+        let statusLabel = UILabel()
+        statusLabel.text = "Safely connected"
+        statusLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        statusLabel.textAlignment = .center
+
+        let timerLabel = UILabel()
+        timerLabel.text = "00:00:00"
+        timerLabel.font = UIFont.systemFont(ofSize: 16)
+        timerLabel.textColor = .darkGray
+        timerLabel.textAlignment = .center
+
+        let statusStack = UIStackView(arrangedSubviews: [statusLabel, timerLabel])
+        statusStack.axis = .vertical
+        statusStack.spacing = 4
+        statusStack.alignment = .center
+        statusStack.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(statusStack)
+
+        NSLayoutConstraint.activate([
+            statusStack.bottomAnchor.constraint(equalTo: selectedServerView.topAnchor, constant: -20),
+            statusStack.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+
         // Add selectedServerCell.cardView to hierarchy and constrain it to the bottom safe area, with left/right padding 20 and height ~80
         NSLayoutConstraint.activate([
             selectedServerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
