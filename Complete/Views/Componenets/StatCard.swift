@@ -5,11 +5,33 @@
 //  Created by Adebayo Sotannde on 10/22/25.
 //
 
-
-
-
 import UIKit
 
+//MARK: - ConnectionState
+enum ConnectionState
+{
+    case inactive      // value == 0 → gray
+    case active        // value > 0 → green
+}
+
+//MARK: - DataUnit
+enum DataUnit: String
+{
+    case kb = "KB/s"
+    case mb = "MB/s"
+    case gb = "GB/s"
+    case tb = "TB/s"
+}
+
+//MARK: - StatCardData
+struct StatCardData
+{
+    let value: Double          // e.g. 512.3
+    let unit: DataUnit         // enum below
+    let connectionState: ConnectionState
+}
+
+//MARK: - StatCard
 class StatCard: UIView
 {
     

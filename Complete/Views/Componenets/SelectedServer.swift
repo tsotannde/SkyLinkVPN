@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SelectedServerView: UIView
+class SelectedServer: UIView
 {
     private let flagImageView = UIImageView()
     private let cityStateLabel = UILabel()
