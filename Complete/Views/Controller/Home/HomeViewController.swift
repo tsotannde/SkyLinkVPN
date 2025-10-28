@@ -321,9 +321,43 @@ extension HomeViewController
         statusStack.alignment = .center
         statusStack.translatesAutoresizingMaskIntoConstraints = false
 
+        // Circle container setup
+        let circleContainer = UIView()
+        circleContainer.translatesAutoresizingMaskIntoConstraints = false
+
+        let outerCircle = UIView()
+        outerCircle.backgroundColor = UIColor.systemBlue
+        outerCircle.layer.cornerRadius = 75
+        outerCircle.translatesAutoresizingMaskIntoConstraints = false
+
+        let innerCircle = UIView()
+        innerCircle.backgroundColor = UIColor.white
+        innerCircle.layer.cornerRadius = 55
+        innerCircle.clipsToBounds = true
+        innerCircle.translatesAutoresizingMaskIntoConstraints = false
+
+        circleContainer.addSubview(outerCircle)
+        circleContainer.addSubview(innerCircle)
+
         view.addSubview(statusStack)
+        view.addSubview(circleContainer)
 
         NSLayoutConstraint.activate([
+            circleContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            circleContainer.bottomAnchor.constraint(equalTo: statusStack.topAnchor, constant: -40),
+            circleContainer.widthAnchor.constraint(equalToConstant: 200),
+            circleContainer.heightAnchor.constraint(equalToConstant: 200),
+
+            outerCircle.centerXAnchor.constraint(equalTo: circleContainer.centerXAnchor),
+            outerCircle.centerYAnchor.constraint(equalTo: circleContainer.centerYAnchor),
+            outerCircle.widthAnchor.constraint(equalToConstant: 150),
+            outerCircle.heightAnchor.constraint(equalToConstant: 150),
+
+            innerCircle.centerXAnchor.constraint(equalTo: circleContainer.centerXAnchor),
+            innerCircle.centerYAnchor.constraint(equalTo: circleContainer.centerYAnchor),
+            innerCircle.widthAnchor.constraint(equalToConstant: 110),
+            innerCircle.heightAnchor.constraint(equalToConstant: 110),
+
             statusStack.bottomAnchor.constraint(equalTo: selectedServerView.topAnchor, constant: -20),
             statusStack.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
