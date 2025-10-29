@@ -52,7 +52,7 @@ class StatCard: UIView
         
         // Configure icon
         icon.image = UIImage(systemName: iconName)
-        icon.tintColor = UIColor(named: "primaryColor")
+        icon.tintColor = AppDesign.ColorScheme.Styling.Tint.statIcon
         icon.translatesAutoresizingMaskIntoConstraints = false
         
         // Title label
@@ -96,6 +96,12 @@ class StatCard: UIView
         translatesAutoresizingMaskIntoConstraints = false
     }
     
+    convenience init(title: String, value: String, unit: String, icon: UIImage?) {
+        self.init(title: title, value: value, unit: unit, iconName: "")
+        // Override the icon image when provided directly
+        self.icon.image = icon
+    }
+    
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
     private static func formatSpeed(_ bytesPerSecond: Double) -> (String, String) {
@@ -120,7 +126,7 @@ class StatCard: UIView
         // Determine color
         switch state {
         case .inactive:
-            valueLabel.textColor = .red
+            valueLabel.textColor = .gray
         case .active:
             valueLabel.textColor = .systemGreen
         }
@@ -135,3 +141,4 @@ class StatCard: UIView
         }, completion: nil)
     }
 }
+

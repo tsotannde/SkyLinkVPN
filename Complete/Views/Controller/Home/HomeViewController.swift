@@ -11,15 +11,9 @@ import NetworkExtension
 
 class HomeViewController: UIViewController
 {
-    #warning("Needs Work")
-   // private var vpnTimer: Timer?
-   // private var connectionStartDate: Date?
-    
-    //Left Components
     internal let gridButton = createGridButton()
     internal let premiumButton = createPremiumButton()
 
-    //
     internal let downloadCard = createDownloadCard()
     internal let uploadCard = createUploadCard()
     internal let selectedServerView = SelectedServer()
@@ -28,9 +22,9 @@ class HomeViewController: UIViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
-
         hideNavigationBar()
         setBackgroundColor()
+        
         constructUserInterface()
         updateSelectedServerView()
         checkVpnStatusOnLaunch()
@@ -162,43 +156,12 @@ extension HomeViewController
     
    
     
-    static func createDownloadCard()->StatCard
-    {
-        let defaults = UserDefaults(suiteName: DesignSystem.configuration.groupName)
-        let downloadBytes = defaults?.double(forKey: "downloadSpeed") ?? 0
-        let isConnected = defaults?.bool(forKey: "isConnected") ?? false
-        let state: ConnectionState = isConnected ? .active : .inactive
-        
-        let card = StatCard(title:DesignSystem.L10n.downloadKey , value: downloadBytes.description, unit: "mb/s", iconName: "arrow.down.circle.fill")
-        card.update(speed: downloadBytes, state: state)
-        return card
-    }
-    
-    static func createUploadCard()->StatCard
-    {
-        let defaults = UserDefaults(suiteName: DesignSystem.configuration.groupName)
-        let uploadBytes = defaults?.double(forKey: "uploadSpeed") ?? 0
-        let isConnected = defaults?.bool(forKey: "isConnected") ?? false
-        let state: ConnectionState = isConnected ? .active : .inactive
-        
-        let card = StatCard(title: DesignSystem.L10n.uploadKey, value: uploadBytes.description, unit: "mb/s", iconName: "arrow.down.circle.fill")
-        card.update(speed: uploadBytes, state: state)
-        return card
-    }
+   
 }
-
 //MARK: - Construct User Interface
 extension HomeViewController
 {
-    func hideNavigationBar()
-    {
-        NavigationManager.shared.toggleNavigationBar(on: navigationController, animated: false, shouldShow: false)
-    }
-    
-    func setBackgroundColor()
-    {
-        view.backgroundColor = DesignSystem.AppColors.backgroundcolor
-    }
+   
     
     func constructUserInterface()
     {
@@ -231,18 +194,88 @@ extension HomeViewController
             premiumButton.widthAnchor.constraint(equalToConstant: 174)
         ])
         
-        // Middle row: downloadCard and uploadCard side by side, placed below gridButton with spacing
+        // Container for stats (rounded background) with divider between cards
+        let statsContainer = UIView()
+        statsContainer.translatesAutoresizingMaskIntoConstraints = false
+        statsContainer.backgroundColor = .clear
+        statsContainer.layer.cornerRadius = 16
+        statsContainer.layer.masksToBounds = true
+        statsContainer.layer.borderColor = UIColor.red.cgColor
+        statsContainer.layer.borderWidth = 1
+        view.addSubview(statsContainer)
+
+        // Divider view (thin, inset, adaptive color)
+        let divider = UIView()
+        divider.backgroundColor = .separator
+        divider.translatesAutoresizingMaskIntoConstraints = false
+        divider.setContentHuggingPriority(.required, for: .horizontal)
+        divider.setContentCompressionResistancePriority(.required, for: .horizontal)
         NSLayoutConstraint.activate([
-            downloadCard.topAnchor.constraint(equalTo: gridButton.bottomAnchor, constant: 40),
-            downloadCard.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            downloadCard.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: -8),
-            downloadCard.heightAnchor.constraint(equalToConstant: 80),
-            
-            uploadCard.topAnchor.constraint(equalTo: gridButton.bottomAnchor, constant: 40),
-            uploadCard.leadingAnchor.constraint(equalTo: view.centerXAnchor, constant: 8),
-            uploadCard.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            uploadCard.heightAnchor.constraint(equalToConstant: 80)
+            divider.widthAnchor.constraint(equalToConstant: 1)
         ])
+
+        // Wrap cards in equal-width containers so the divider stays centered
+        let leftContainer = UIView()
+        let rightContainer = UIView()
+        leftContainer.translatesAutoresizingMaskIntoConstraints = false
+        rightContainer.translatesAutoresizingMaskIntoConstraints = false
+
+        leftContainer.addSubview(downloadCard)
+        rightContainer.addSubview(uploadCard)
+        downloadCard.translatesAutoresizingMaskIntoConstraints = false
+        uploadCard.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            // Pin cards to their containers
+            downloadCard.leadingAnchor.constraint(equalTo: leftContainer.leadingAnchor),
+            downloadCard.trailingAnchor.constraint(equalTo: leftContainer.trailingAnchor),
+            downloadCard.topAnchor.constraint(equalTo: leftContainer.topAnchor),
+            downloadCard.bottomAnchor.constraint(equalTo: leftContainer.bottomAnchor),
+
+            uploadCard.leadingAnchor.constraint(equalTo: rightContainer.leadingAnchor),
+            uploadCard.trailingAnchor.constraint(equalTo: rightContainer.trailingAnchor),
+            uploadCard.topAnchor.constraint(equalTo: rightContainer.topAnchor),
+            uploadCard.bottomAnchor.constraint(equalTo: rightContainer.bottomAnchor)
+        ])
+
+        let statsStack = UIStackView(arrangedSubviews: [leftContainer, divider, rightContainer])
+        statsStack.axis = .horizontal
+        statsStack.alignment = .fill
+        statsStack.distribution = .fill
+        statsStack.spacing = 0
+        statsStack.translatesAutoresizingMaskIntoConstraints = false
+        statsContainer.addSubview(statsStack)
+
+        NSLayoutConstraint.activate([
+            // Place container below grid button
+            statsContainer.topAnchor.constraint(equalTo: gridButton.bottomAnchor, constant: 25),
+            statsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            statsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            statsContainer.heightAnchor.constraint(equalToConstant: 80),
+
+            // Pin the internal stack to the container with padding
+            statsStack.leadingAnchor.constraint(equalTo: statsContainer.leadingAnchor),
+            statsStack.trailingAnchor.constraint(equalTo: statsContainer.trailingAnchor),
+            statsStack.topAnchor.constraint(equalTo: statsContainer.topAnchor),
+            statsStack.bottomAnchor.constraint(equalTo: statsContainer.bottomAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            leftContainer.widthAnchor.constraint(equalTo: rightContainer.widthAnchor)
+        ])
+
+        // Inset the divider vertically so it doesn't span the full height
+        NSLayoutConstraint.activate([
+            divider.topAnchor.constraint(equalTo: statsStack.topAnchor, constant: 8),
+            divider.bottomAnchor.constraint(equalTo: statsStack.bottomAnchor, constant: -8)
+        ])
+
+        downloadCard.backgroundColor = .clear
+        uploadCard.backgroundColor = .clear
+        downloadCard.layer.cornerRadius = 0
+        uploadCard.layer.cornerRadius = 0
+        downloadCard.layer.masksToBounds = false
+        uploadCard.layer.masksToBounds = false
 
         // Status + Timer labels stack
         let statusLabel = UILabel()
@@ -298,92 +331,211 @@ extension HomeViewController
     {
         let button = UIButton(type: .system)
         button.setImage(AppDesign.Images.grid, for: .normal)
-        button.tintColor = AppDesign.ColorScheme.tintColors.grey
+        button.tintColor = AppDesign.ColorScheme.Styling.Tint.secondary
         
         // Background Color and Border Color
-        button.backgroundColor = AppDesign.ColorScheme.BackgroundsColor.white
+        button.backgroundColor = AppDesign.ColorScheme.Styling.Background.surface
         button.layer.cornerRadius = 16
-        button.layer.borderColor = AppDesign.ColorScheme.boarderColor.grey.cgColor
+        button.layer.borderColor = AppDesign.ColorScheme.Styling.Border.subtle.cgColor
         button.layer.borderWidth = 1
         
         // Depth Drop Shadow for Depth
-        button.layer.shadowColor = AppDesign.ColorScheme.shadowcolor.black.cgColor
-        button.layer.shadowOpacity = 0.08
+        button.layer.shadowColor = AppDesign.ColorScheme.Styling.Shadow.standard.cgColor
+        button.layer.shadowOpacity = 0.15
         button.layer.shadowOffset = CGSize(width: 0, height: 4)
         button.layer.shadowRadius = 8
         
         return button
     }
     
-    static func createPremiumButton() -> UIButton {
+    static func createPremiumButton() -> UIButton
+    {
         let button = UIButton(type: .system)
         
         // Text setup
-        button.setTitle(DesignSystem.L10n.goPremiumKey, for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitle(AppDesign.Text.HomeViewController.goPremium, for: .normal)
+        button.setTitleColor(AppDesign.ColorScheme.TextColors.PrimaryTheme.text, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+    
         
-        // Background color (orange primary)
-        button.backgroundColor = DesignSystem.AppColors.Themes.primaryColor
+        button.backgroundColor = AppDesign.ColorScheme.Themes.primary
         
         // Corner radius & shadow
         button.layer.cornerRadius = 16
-        button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOpacity = 0.15
+        button.layer.shadowColor = AppDesign.ColorScheme.Styling.Shadow.standard.cgColor
+        button.layer.shadowOpacity = 0.4
         button.layer.shadowRadius = 8
         button.layer.shadowOffset = CGSize(width: 0, height: 4)
         
         // Add image to left side of text
-        let icon = UIImage(named: "crown")?.withRenderingMode(.alwaysOriginal)
+        let icon = AppDesign.Images.crown?.withRenderingMode(.alwaysOriginal)
         button.setImage(icon, for: .normal)
         button.tintColor = .white
+    
         
-        // Spacing and padding adjustments using UIButton.Configuration API
+        // Spacing and padding
         var configuration = UIButton.Configuration.plain()
         configuration.imagePadding = 8
         configuration.imagePlacement = .leading
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
         button.configuration = configuration
         
-        // Rounded rect style matches Figma proportions
+        // Rounded Rectanger
         button.translatesAutoresizingMaskIntoConstraints = false
         button.widthAnchor.constraint(equalToConstant: 174).isActive = true
         button.heightAnchor.constraint(equalToConstant: 48).isActive = true
         
         return button
     }
+    
+    static func createDownloadCard()->StatCard
+    {
+        let defaults = UserDefaults(suiteName: AppDesign.AppKeys.UserDefaults.suiteName)
+        let downloadBytes = defaults?.double(forKey: AppDesign.AppKeys.UserDefaults.downloadSpeed) ?? 0
+        let isConnected = defaults?.bool(forKey: AppDesign.AppKeys.UserDefaults.isConnected) ?? false
+        let state: ConnectionState = isConnected ? .active : .inactive
+        
+        let card = StatCard(title:AppDesign.Text.downloadKey , value: downloadBytes.description, unit: "mb/s", icon: AppDesign.Images.downloadArrow)
+        card.update(speed: downloadBytes, state: state)
+        return card
+    }
+    
+    static func createUploadCard()->StatCard
+    {
+        let defaults = UserDefaults(suiteName: AppDesign.AppKeys.UserDefaults.suiteName)
+        let uploadBytes = defaults?.double(forKey: AppDesign.AppKeys.UserDefaults.uploadSpeed) ?? 0
+        let isConnected = defaults?.bool(forKey: AppDesign.AppKeys.UserDefaults.isConnected) ?? false
+        let state: ConnectionState = isConnected ? .active : .inactive
+        
+        let card = StatCard(title: AppDesign.Text.uploadKey, value: uploadBytes.description, unit: "mb/s", icon: AppDesign.Images.uploadArrow)
+        card.update(speed: uploadBytes, state: state)
+        return card
+    }
 }
+
+//MARK: - Constuct User Interface
+extension HomeViewController
+{
+    func hideNavigationBar()
+    {
+        NavigationManager.shared.toggleNavigationBar(on: navigationController, animated: false, shouldShow: false)
+    }
+    
+    func setBackgroundColor()
+    {
+        view.backgroundColor = AppDesign.ColorScheme.App.background
+    }
+}
+
+
+
+
+
+
+
+
 
 struct AppDesign
 {
+    struct Configuration
+    {
+        // TODO: align with your existing app group identifier
+        static let groupName: String = "group.com.skylink"
+    }
+    
+    enum AppKeys
+    {
+        enum UserDefaults
+        {
+            static let suiteName = AppDesign.Configuration.groupName
+            static let isConnected = "isConnected"
+            static let downloadSpeed = "downloadSpeed"
+            static let uploadSpeed = "uploadSpeed"
+        }
+    }
     struct Images
     {
         static let grid: UIImage? = UIImage(systemName: "square.grid.2x2")
+        static let crown: UIImage? = UIImage(named: "crown")
+        static let downloadArrow: UIImage? = UIImage(systemName: "arrow.down.circle.fill")
+        static let uploadArrow: UIImage? = UIImage(systemName: "arrow.up.circle.fill")
     }
     
     struct ColorScheme
     {
-        
-        struct BackgroundsColor
+        struct Styling
         {
-            static let white: UIColor = .white
+            struct BackgroundsColor
+            {
+                static let white: UIColor = .white
+            }
+            
+            struct tintColors
+            {
+                static let grey: UIColor = .darkGrey
+            }
+            
+            struct boarderColor
+            {
+                static let grey: UIColor = UIColor(white: 0.9, alpha: 1)
+            }
+            
+            struct shadowcolor
+            {
+                static let black: UIColor = .black
+            }
+            
+            struct Background {
+                static let surface: UIColor = .white
+            }
+            struct Tint {
+                static let secondary: UIColor = .darkGrey
+                static let statIcon: UIColor = .systemGreen
+            }
+            struct Border {
+                static let subtle: UIColor = UIColor(white: 0.9, alpha: 1)
+            }
+            struct Shadow {
+                static let standard: UIColor = .black
+            }
         }
         
-        struct tintColors
+        struct App
         {
-            static let grey: UIColor = .darkGrey
+            static let background: UIColor = .systemBackground
         }
         
-        struct boarderColor
+        struct Themes
         {
-            static let grey: UIColor = UIColor(white: 0.9, alpha: 1)
+            static let primary: UIColor = UIColor(red: 0.2588, green: 0.6471, blue: 0.9608, alpha: 1.0)
         }
         
-        struct shadowcolor
+        struct TextColors
         {
-            static let black: UIColor = .black
+            struct PrimaryTheme
+            {
+                static let text: UIColor = .white
+            }
+            
+            struct SecondaryTheme
+            {
+                
+            }
         }
+        
         
     }
     
+    enum Text
+    {
+        struct HomeViewController
+        {
+            static let goPremium = String(localized:  "goPremiumKey")
+        }
+        
+        
+        static let downloadKey = String(localized:  "downloadKey")
+        static let uploadKey = String(localized:  "uploadKey")
+    }
 }
+
