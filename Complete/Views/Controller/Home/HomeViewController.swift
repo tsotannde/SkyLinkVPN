@@ -11,16 +11,18 @@ import NetworkExtension
 
 class HomeViewController: UIViewController
 {
-    private var vpnTimer: Timer?
-    private var connectionStartDate: Date?
+    #warning("Needs Work")
+   // private var vpnTimer: Timer?
+   // private var connectionStartDate: Date?
     
+    //Left Components
     internal let gridButton = createGridButton()
     internal let premiumButton = createPremiumButton()
 
-    
+    //
     internal let downloadCard = createDownloadCard()
     internal let uploadCard = createUploadCard()
-    internal let selectedServerView = SelectedServerView()
+    internal let selectedServerView = SelectedServer()
 
    
     override func viewDidLoad()
@@ -156,72 +158,9 @@ import UIKit
 //MARK: - UIComponents
 extension HomeViewController
 {
-    static func createGridButton() -> UIButton
-    {
-        let button = UIButton(type: .system)
-        
-        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
-        button.setImage(UIImage(systemName: "square.grid.2x2", withConfiguration: config), for: .normal)
-        button.tintColor = .darkGray
-        
-        // Background + border styling
-        button.backgroundColor = .white
-        button.layer.cornerRadius = 16
-        button.layer.borderColor = UIColor(white: 0.9, alpha: 1).cgColor
-        button.layer.borderWidth = 1
-        
-        // Subtle drop shadow for depth
-        button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOpacity = 0.08
-        button.layer.shadowOffset = CGSize(width: 0, height: 4)
-        button.layer.shadowRadius = 8
-        
-        var configuration = UIButton.Configuration.plain()
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-        button.configuration = configuration
-        
-        button.translatesAutoresizingMaskIntoConstraints = false
-        
-        return button
-    }
+   
     
-    static func createPremiumButton() -> UIButton {
-        let button = UIButton(type: .system)
-        
-        // Text setup
-        button.setTitle(DesignSystem.L10n.goPremiumKey, for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-        
-        // Background color (orange primary)
-        button.backgroundColor = DesignSystem.AppColors.Themes.primaryColor
-        
-        // Corner radius & shadow
-        button.layer.cornerRadius = 16
-        button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOpacity = 0.15
-        button.layer.shadowRadius = 8
-        button.layer.shadowOffset = CGSize(width: 0, height: 4)
-        
-        // Add image to left side of text
-        let icon = UIImage(named: "crown")?.withRenderingMode(.alwaysOriginal)
-        button.setImage(icon, for: .normal)
-        button.tintColor = .white
-        
-        // Spacing and padding adjustments using UIButton.Configuration API
-        var configuration = UIButton.Configuration.plain()
-        configuration.imagePadding = 8
-        configuration.imagePlacement = .leading
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
-        button.configuration = configuration
-        
-        // Rounded rect style matches Figma proportions
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.widthAnchor.constraint(equalToConstant: 174).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 48).isActive = true
-        
-        return button
-    }
+   
     
     static func createDownloadCard()->StatCard
     {
@@ -283,6 +222,8 @@ extension HomeViewController
         NSLayoutConstraint.activate([
             gridButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             gridButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            gridButton.heightAnchor.constraint(equalToConstant: 48),
+            gridButton.widthAnchor.constraint(equalToConstant: 48),
             
             premiumButton.centerYAnchor.constraint(equalTo: gridButton.centerYAnchor),
             premiumButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
@@ -321,43 +262,17 @@ extension HomeViewController
         statusStack.alignment = .center
         statusStack.translatesAutoresizingMaskIntoConstraints = false
 
-        // Circle container setup
-        let circleContainer = UIView()
-        circleContainer.translatesAutoresizingMaskIntoConstraints = false
-
-        let outerCircle = UIView()
-        outerCircle.backgroundColor = UIColor.systemBlue
-        outerCircle.layer.cornerRadius = 75
-        outerCircle.translatesAutoresizingMaskIntoConstraints = false
-
-        let innerCircle = UIView()
-        innerCircle.backgroundColor = UIColor.white
-        innerCircle.layer.cornerRadius = 55
-        innerCircle.clipsToBounds = true
-        innerCircle.translatesAutoresizingMaskIntoConstraints = false
-
-        circleContainer.addSubview(outerCircle)
-        circleContainer.addSubview(innerCircle)
-
         view.addSubview(statusStack)
-        view.addSubview(circleContainer)
+
+        // Add PowerButtonView
+        let powerButtonView = PowerButton()
+        view.addSubview(powerButtonView)
 
         NSLayoutConstraint.activate([
-            circleContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            circleContainer.bottomAnchor.constraint(equalTo: statusStack.topAnchor, constant: -40),
-            circleContainer.widthAnchor.constraint(equalToConstant: 200),
-            circleContainer.heightAnchor.constraint(equalToConstant: 200),
-
-            outerCircle.centerXAnchor.constraint(equalTo: circleContainer.centerXAnchor),
-            outerCircle.centerYAnchor.constraint(equalTo: circleContainer.centerYAnchor),
-            outerCircle.widthAnchor.constraint(equalToConstant: 150),
-            outerCircle.heightAnchor.constraint(equalToConstant: 150),
-
-            innerCircle.centerXAnchor.constraint(equalTo: circleContainer.centerXAnchor),
-            innerCircle.centerYAnchor.constraint(equalTo: circleContainer.centerYAnchor),
-            innerCircle.widthAnchor.constraint(equalToConstant: 110),
-            innerCircle.heightAnchor.constraint(equalToConstant: 110),
-
+            powerButtonView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            powerButtonView.bottomAnchor.constraint(equalTo: statusStack.topAnchor, constant: -40),
+            powerButtonView.widthAnchor.constraint(equalToConstant: 200),
+            powerButtonView.heightAnchor.constraint(equalToConstant: 200),
             statusStack.bottomAnchor.constraint(equalTo: selectedServerView.topAnchor, constant: -20),
             statusStack.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
@@ -374,4 +289,101 @@ extension HomeViewController
         let tap = UITapGestureRecognizer(target: self, action: #selector(serverViewTapped))
         selectedServerView.addGestureRecognizer(tap)
     }
+}
+
+//MARK: - User Interface Components
+extension HomeViewController
+{
+    static func createGridButton() -> UIButton
+    {
+        let button = UIButton(type: .system)
+        button.setImage(AppDesign.Images.grid, for: .normal)
+        button.tintColor = AppDesign.ColorScheme.tintColors.grey
+        
+        // Background Color and Border Color
+        button.backgroundColor = AppDesign.ColorScheme.BackgroundsColor.white
+        button.layer.cornerRadius = 16
+        button.layer.borderColor = AppDesign.ColorScheme.boarderColor.grey.cgColor
+        button.layer.borderWidth = 1
+        
+        // Depth Drop Shadow for Depth
+        button.layer.shadowColor = AppDesign.ColorScheme.shadowcolor.black.cgColor
+        button.layer.shadowOpacity = 0.08
+        button.layer.shadowOffset = CGSize(width: 0, height: 4)
+        button.layer.shadowRadius = 8
+        
+        return button
+    }
+    
+    static func createPremiumButton() -> UIButton {
+        let button = UIButton(type: .system)
+        
+        // Text setup
+        button.setTitle(DesignSystem.L10n.goPremiumKey, for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        
+        // Background color (orange primary)
+        button.backgroundColor = DesignSystem.AppColors.Themes.primaryColor
+        
+        // Corner radius & shadow
+        button.layer.cornerRadius = 16
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.15
+        button.layer.shadowRadius = 8
+        button.layer.shadowOffset = CGSize(width: 0, height: 4)
+        
+        // Add image to left side of text
+        let icon = UIImage(named: "crown")?.withRenderingMode(.alwaysOriginal)
+        button.setImage(icon, for: .normal)
+        button.tintColor = .white
+        
+        // Spacing and padding adjustments using UIButton.Configuration API
+        var configuration = UIButton.Configuration.plain()
+        configuration.imagePadding = 8
+        configuration.imagePlacement = .leading
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
+        button.configuration = configuration
+        
+        // Rounded rect style matches Figma proportions
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.widthAnchor.constraint(equalToConstant: 174).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 48).isActive = true
+        
+        return button
+    }
+}
+
+struct AppDesign
+{
+    struct Images
+    {
+        static let grid: UIImage? = UIImage(systemName: "square.grid.2x2")
+    }
+    
+    struct ColorScheme
+    {
+        
+        struct BackgroundsColor
+        {
+            static let white: UIColor = .white
+        }
+        
+        struct tintColors
+        {
+            static let grey: UIColor = .darkGrey
+        }
+        
+        struct boarderColor
+        {
+            static let grey: UIColor = UIColor(white: 0.9, alpha: 1)
+        }
+        
+        struct shadowcolor
+        {
+            static let black: UIColor = .black
+        }
+        
+    }
+    
 }
