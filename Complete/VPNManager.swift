@@ -82,7 +82,7 @@ final class VPNManager {
         }
     }
 
-    // MARK: - Stop Tunnel
+     //MARK: - Stop Tunnel
     func stopTunnel() async {
         guard let connection = manager?.connection else {
             print("No active tunnel to stop.")
@@ -92,6 +92,8 @@ final class VPNManager {
         connection.stopVPNTunnel()
         print("🛑 VPN Tunnel Stopped")
     }
+    
+   
 
     // MARK: - Helpers
     private func loadOrCreateTunnelProvider() async throws -> NETunnelProviderManager {

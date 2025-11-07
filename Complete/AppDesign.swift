@@ -1,17 +1,12 @@
-//
-//  AppDesign.swift
-//  SkyLink
-//
-//  Created by Adebayo Sotannde on 11/6/25.
-//
-
+import UIKit
 
 struct AppDesign
 {
     struct Configuration
     {
         // TODO: align with your existing app group identifier
-        static let groupName: String = "group.com.skylink"
+        //static let groupName: String = "group.com.skylink"
+        static let groupName: String = "group.com.adebayosotannde.SkyLink"
     }
     
     enum AppKeys
@@ -30,6 +25,7 @@ struct AppDesign
         static let crown: UIImage? = UIImage(named: "crown")
         static let downloadArrow: UIImage? = UIImage(systemName: "arrow.down")
         static let uploadArrow: UIImage? = UIImage(systemName: "arrow.up")
+        static let chevronUp: UIImage? = UIImage(systemName: "chevron.up")
     }
     
     struct ColorScheme
@@ -70,6 +66,7 @@ struct AppDesign
             struct PrimaryTheme
             {
                 static let text: UIColor = .white
+                static let secondaryText: UIColor = .secondaryLabel
             }
         }
         
@@ -86,7 +83,10 @@ struct AppDesign
         
         static let downloadKey = String(localized:  "downloadKey")
         static let uploadKey = String(localized:  "uploadKey")
-        static let speedUnit = String(localized: "speedUnitKey", defaultValue: "MB/s")
+        static let speedUnit = String(localized: "speedUnitKey")
+        static let connectedKey = String(localized: "connectedKey")
+        static let disconnectedKey = String(localized: "disconnectedKey")
+        
     }
 }
 
@@ -101,4 +101,3 @@ extension AppDesign {
         }
     }
 }
-

@@ -13,7 +13,7 @@ struct DesignSystem
 {
     struct configuration
     {
-        static let groupName =  "group.com.adebayosotannde.SkyLink"
+        //static let groupName =  "group.com.adebayosotannde.SkyLink"
     }
      
     

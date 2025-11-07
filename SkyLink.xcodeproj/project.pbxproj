@@ -31,7 +31,12 @@
 		EE2D388D2EAC1B1E0010A30E /* VPNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D388C2EAC1B1E0010A30E /* VPNManager.swift */; };
 		EE2D388F2EAC331B0010A30E /* FirebaseRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D388E2EAC331B0010A30E /* FirebaseRequestManager.swift */; };
 		EEA05C8C2EB173F200AF703E /* StatCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA05C6D2EB173F200AF703E /* StatCard.swift */; };
-		EEA05CAA2EB17BDB00AF703E /* PowerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA05CA92EB17BDB00AF703E /* PowerButton.swift */; };
+		EEB9F43E2EB3F69A008C1651 /* ConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9F43D2EB3F69A008C1651 /* ConnectionStatus.swift */; };
+		EEB9F4402EB3F6AB008C1651 /* PowerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9F43F2EB3F6AB008C1651 /* PowerButton.swift */; };
+		EEB9F4782EB42942008C1651 /* Sora-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EEB9F4622EB42942008C1651 /* Sora-Regular.ttf */; };
+		EEB9F4792EB42942008C1651 /* Sora-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EEB9F4632EB42942008C1651 /* Sora-SemiBold.ttf */; };
+		EEFC0B332EBD6B2B0019629C /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFC0B0C2EBD6B2B0019629C /* NotificationCenter.swift */; };
+		EEFC0B4A2EBD902D0019629C /* AppDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFC0B492EBD902D0019629C /* AppDesign.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,7 +85,12 @@
 		EE2D388C2EAC1B1E0010A30E /* VPNManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNManager.swift; sourceTree = "<group>"; };
 		EE2D388E2EAC331B0010A30E /* FirebaseRequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseRequestManager.swift; sourceTree = "<group>"; };
 		EEA05C6D2EB173F200AF703E /* StatCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatCard.swift; sourceTree = "<group>"; };
-		EEA05CA92EB17BDB00AF703E /* PowerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerButton.swift; sourceTree = "<group>"; };
+		EEB9F43D2EB3F69A008C1651 /* ConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionStatus.swift; sourceTree = "<group>"; };
+		EEB9F43F2EB3F6AB008C1651 /* PowerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerButton.swift; sourceTree = "<group>"; };
+		EEB9F4622EB42942008C1651 /* Sora-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sora-Regular.ttf"; sourceTree = "<group>"; };
+		EEB9F4632EB42942008C1651 /* Sora-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sora-SemiBold.ttf"; sourceTree = "<group>"; };
+		EEFC0B0C2EBD6B2B0019629C /* NotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
+		EEFC0B492EBD902D0019629C /* AppDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDesign.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -183,14 +193,24 @@
 		EE2D38762EAAD4AD0010A30E /* Complete */ = {
 			isa = PBXGroup;
 			children = (
-				EE2D38772EAAD57B0010A30E /* Managers */,
-				EE2D387A2EAADB7D0010A30E /* Models */,
-				EE2D38852EABF8870010A30E /* Views */,
-				EE2D387F2EABE6CF0010A30E /* AccountManager.swift */,
-				EE2D38152EAA97810010A30E /* SubscriptionManager.swift */,
+				EEFC0B492EBD902D0019629C /* AppDesign.swift */,
+				EE2D38142EAA97810010A30E /* ServerFetcherManager.swift */,
+				EE2D38132EAA97810010A30E /* NavigationManager.swift */,
+				EE2D381D2EAA97810010A30E /* ServerDatabase.swift */,
+				EEA05C6D2EB173F200AF703E /* StatCard.swift */,
+				EE2D38292EAA97810010A30E /* ServerSelectionViewController.swift */,
+				EE2D38122EAA97810010A30E /* KeyManager.swift */,
 				EE2D388C2EAC1B1E0010A30E /* VPNManager.swift */,
 				EE2D388E2EAC331B0010A30E /* FirebaseRequestManager.swift */,
 				EE2D38102EAA97810010A30E /* ConfigurationManager.swift */,
+				EE2D38152EAA97810010A30E /* SubscriptionManager.swift */,
+				EE2D382C2EAA97810010A30E /* SplashViewController.swift */,
+				EE2D387F2EABE6CF0010A30E /* AccountManager.swift */,
+				EEFC0B0C2EBD6B2B0019629C /* NotificationCenter.swift */,
+				EE2D38772EAAD57B0010A30E /* Managers */,
+				EE2D387A2EAADB7D0010A30E /* Models */,
+				EE2D38852EABF8870010A30E /* Views */,
+				EEFC0B4D2EBDADDC0019629C /* Assets */,
 			);
 			path = Complete;
 			sourceTree = "<group>";
@@ -198,10 +218,7 @@
 		EE2D38772EAAD57B0010A30E /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				EE2D38122EAA97810010A30E /* KeyManager.swift */,
 				EE2D38732EAAD4990010A30E /* FlagManager.swift */,
-				EE2D38142EAA97810010A30E /* ServerFetcherManager.swift */,
-				EE2D38132EAA97810010A30E /* NavigationManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -209,9 +226,8 @@
 		EE2D387A2EAADB7D0010A30E /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				EE2D387B2EAADB970010A30E /* Server.swift */,
-				EE2D381D2EAA97810010A30E /* ServerDatabase.swift */,
 				EE2D387D2EAADBA40010A30E /* Country.swift */,
+				EE2D387B2EAADB970010A30E /* Server.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -228,9 +244,9 @@
 		EE2D38862EABF8940010A30E /* Componenets */ = {
 			isa = PBXGroup;
 			children = (
-				EEA05C6D2EB173F200AF703E /* StatCard.swift */,
+				EEB9F43F2EB3F6AB008C1651 /* PowerButton.swift */,
+				EEB9F43D2EB3F69A008C1651 /* ConnectionStatus.swift */,
 				EE2D38212EAA97810010A30E /* SelectedServer.swift */,
-				EEA05CA92EB17BDB00AF703E /* PowerButton.swift */,
 			);
 			path = Componenets;
 			sourceTree = "<group>";
@@ -248,7 +264,6 @@
 		EE2D38882EAC00D70010A30E /* Splash */ = {
 			isa = PBXGroup;
 			children = (
-				EE2D382C2EAA97810010A30E /* SplashViewController.swift */,
 			);
 			path = Splash;
 			sourceTree = "<group>";
@@ -264,9 +279,17 @@
 		EE2D388B2EAC179C0010A30E /* Server Selection */ = {
 			isa = PBXGroup;
 			children = (
-				EE2D38292EAA97810010A30E /* ServerSelectionViewController.swift */,
 			);
 			path = "Server Selection";
+			sourceTree = "<group>";
+		};
+		EEFC0B4D2EBDADDC0019629C /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				EEB9F4622EB42942008C1651 /* Sora-Regular.ttf */,
+				EEB9F4632EB42942008C1651 /* Sora-SemiBold.ttf */,
+			);
+			path = Assets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -395,6 +418,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EEB9F4782EB42942008C1651 /* Sora-Regular.ttf in Resources */,
+				EEB9F4792EB42942008C1651 /* Sora-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,13 +438,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE2D38752EAAD4990010A30E /* FlagManager.swift in Sources */,
+				EEFC0B332EBD6B2B0019629C /* NotificationCenter.swift in Sources */,
 				EE2D38802EABE6CF0010A30E /* AccountManager.swift in Sources */,
 				EE2D388F2EAC331B0010A30E /* FirebaseRequestManager.swift in Sources */,
 				EE2D38412EAA97810010A30E /* ConfigurationManager.swift in Sources */,
+				EEB9F43E2EB3F69A008C1651 /* ConnectionStatus.swift in Sources */,
 				EE2D38432EAA97810010A30E /* KeyManager.swift in Sources */,
 				EE2D38442EAA97810010A30E /* NavigationManager.swift in Sources */,
+				EEFC0B4A2EBD902D0019629C /* AppDesign.swift in Sources */,
 				EEA05C8C2EB173F200AF703E /* StatCard.swift in Sources */,
-				EEA05CAA2EB17BDB00AF703E /* PowerButton.swift in Sources */,
 				EE2D38452EAA97810010A30E /* ServerFetcherManager.swift in Sources */,
 				EE2D387C2EAADB970010A30E /* Server.swift in Sources */,
 				EE2D38462EAA97810010A30E /* SubscriptionManager.swift in Sources */,
@@ -427,6 +454,7 @@
 				EE2D384A2EAA97810010A30E /* SelectedServer.swift in Sources */,
 				EE2D384F2EAA97810010A30E /* ServerSelectionViewController.swift in Sources */,
 				EE2D38502EAA97810010A30E /* HomeViewController.swift in Sources */,
+				EEB9F4402EB3F6AB008C1651 /* PowerButton.swift in Sources */,
 				EE2D38512EAA97810010A30E /* SplashViewController.swift in Sources */,
 				EE2D388D2EAC1B1E0010A30E /* VPNManager.swift in Sources */,
 				EE2D387E2EAADBA40010A30E /* Country.swift in Sources */,
@@ -485,7 +513,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -527,7 +555,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

@@ -6,7 +6,8 @@
 //
 
 
-struct Server: Codable, Identifiable {
+struct Server: Codable, Identifiable
+{
     var id: String { name }
     let name: String
     let nickname: String?

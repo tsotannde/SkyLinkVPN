@@ -15,3 +15,13 @@ extension Notification.Name
     static let internetDidConnect = Notification.Name("internetDidConnect")
     static let internetDidDisconnect = Notification.Name("internetDidDisconnect")
 }
+
+
+//NEW UPDATED
+
+import Foundation
+
+extension Notification.Name {
+    static let vpnDidConnect = Notification.Name("vpnDidConnect")
+    static let vpnDidDisconnect = Notification.Name("vpnDidDisconnect")
+}

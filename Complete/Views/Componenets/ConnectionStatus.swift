@@ -28,13 +28,13 @@ final class ConnectionStatusView: UIView
     {
         translatesAutoresizingMaskIntoConstraints = false
         
-        statusLabel.text = AppDesign.Text.connectedKey
+        statusLabel.text = AppDesign.Text.disconnectedKey //Default Text
         statusLabel.textColor = .label
         statusLabel.font = AppDesign.Fonts.semiBold(ofSize: 16)
         statusLabel.textAlignment = .center
         statusLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        timerLabel.text = "00:00:00"
+        timerLabel.text = "00:00:00" //Defualt Timer
         timerLabel.textColor = AppDesign.ColorScheme.TextColors.PrimaryTheme.secondaryText
         timerLabel.font = AppDesign.Fonts.semiBold(ofSize: 14)
         timerLabel.textAlignment = .center
@@ -56,9 +56,17 @@ final class ConnectionStatusView: UIView
         ])
     }
     
-    func setStatus(text: String)
+    func setStatus(isConnected: Bool)
     {
-        statusLabel.text = text
+        if isConnected
+        {
+            statusLabel.text = AppDesign.Text.connectedKey
+        }
+        else
+        {
+            statusLabel.text = AppDesign.Text.disconnectedKey
+        }
+        
     }
     
     func setTimer(text: String)
