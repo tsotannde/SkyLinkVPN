@@ -303,7 +303,7 @@ extension HomeViewController
             } else
             {
                 print("Starting tunnel…")
-                self.powerButtonView.setState(.startTunnel)
+                self.powerButtonView.setState(.connecting)
                 await VPNManager.shared.startTunnel()
                
             }
@@ -350,7 +350,7 @@ extension HomeViewController
         }
         else
         {
-            powerButtonView.setState(.disconnected)
+            powerButtonView.setState(.connecting)
         }
       
     }

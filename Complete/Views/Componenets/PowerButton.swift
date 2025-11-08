@@ -9,7 +9,7 @@ enum PowerButtonState
 {
     case connected
     case disconnected
-    case startTunnel
+    case connecting
     case stopTunnel
 }
 
@@ -116,7 +116,7 @@ extension PowerButtonView
         case .disconnected:
             print("Disconnected Animation Started")
             disconnectedAnimation()
-        case .startTunnel:
+        case .connecting:
             print("Start Tunnel")
             connectingAnimation()
         case .stopTunnel:
@@ -127,8 +127,14 @@ extension PowerButtonView
 
 extension PowerButtonView
 {
-    private func connectedAnimation()
-    {
+    
+    private func connectedAnimation() {
+        // First, remove the spinner layer if it exists
+        middleCircle.layer.sublayers?.removeAll(where: { $0.name == "spinnerLayer" })
+        
+        // Reset the middle circle’s background to solid (if you want to make it clean)
+        middleCircle.backgroundColor = AppDesign.ColorScheme.Styling.Background.surface
+        
         // Base colors for both circles
         outerCircle.backgroundColor = UIColor.systemGreen.withAlphaComponent(0.9)
         innerCircle.backgroundColor = UIColor.systemGreen.withAlphaComponent(0.9)
@@ -146,10 +152,10 @@ extension PowerButtonView
         outerCircle.layer.add(colorPulse, forKey: "connectedPulseOuter")
         innerCircle.layer.add(colorPulse, forKey: "connectedPulseInner")
     }
-    
    
     
-    private func connectingAnimation() {
+    private func connectingAnimation2()
+    {
         middleCircle.backgroundColor = UIColor.systemGray5.withAlphaComponent(0.4)
         middleCircle.layer.sublayers?.removeAll(where: { $0.name == "spinnerLayer" })
         
@@ -203,6 +209,71 @@ extension PowerButtonView
         spinnerLayer.add(pulseAnimation, forKey: "pulse")
     }
     
+    private func connectingAnimation()
+    {
+        middleCircle.backgroundColor = UIColor.systemGray5.withAlphaComponent(0.4)
+        middleCircle.layer.sublayers?.removeAll(where: { $0.name == "spinnerLayer" })
+        
+        let radius = min(middleCircle.bounds.width, middleCircle.bounds.height) / 2 - 2
+        
+        // Create spinner layer
+        let spinnerLayer = CAShapeLayer()
+        spinnerLayer.name = "spinnerLayer"
+        
+        // Create path at (0,0) since we'll position using anchorPoint
+        let path = UIBezierPath(
+            arcCenter: CGPoint(x: radius, y: radius), // Offset by radius
+            radius: radius,
+            startAngle: -(.pi / 2),
+            endAngle: .pi / 2,
+            clockwise: true
+        )
+        
+        spinnerLayer.path = path.cgPath
+        spinnerLayer.fillColor = UIColor.clear.cgColor
+        spinnerLayer.strokeColor = UIColor.white.cgColor
+        spinnerLayer.lineWidth = 3
+        spinnerLayer.lineCap = .round
+        spinnerLayer.strokeEnd = 1.0
+        
+        // Set the frame and anchor point
+        spinnerLayer.bounds = CGRect(x: 0, y: 0, width: radius * 2, height: radius * 2)
+        spinnerLayer.position = CGPoint(x: middleCircle.bounds.midX, y: middleCircle.bounds.midY)
+        spinnerLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5) // Rotate around center
+        
+        middleCircle.layer.addSublayer(spinnerLayer)
+        
+        // Rotate animation
+        let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        rotationAnimation.fromValue = 0
+        rotationAnimation.toValue = 2 * CGFloat.pi
+        rotationAnimation.duration = 1.5
+        rotationAnimation.repeatCount = .infinity
+        rotationAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
+        
+        // Pulse animation
+        let pulseAnimation = CABasicAnimation(keyPath: "strokeEnd")
+        pulseAnimation.fromValue = 0.3
+        pulseAnimation.toValue = 0.7
+        pulseAnimation.duration = 0.8
+        pulseAnimation.autoreverses = true
+        pulseAnimation.repeatCount = .infinity
+        pulseAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        
+        spinnerLayer.add(rotationAnimation, forKey: "rotation")
+        spinnerLayer.add(pulseAnimation, forKey: "pulse")
+        
+        // Add a subtle scale pulse to the whole button for a "connecting" feel
+        let scaleAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation.fromValue = 0.95
+        scaleAnimation.toValue = 1.0
+        scaleAnimation.duration = 1.2
+        scaleAnimation.autoreverses = true
+        scaleAnimation.repeatCount = .infinity
+        scaleAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        
+        self.layer.add(scaleAnimation, forKey: "connectingScalePulse")
+    }
    
    
     private func disconnectedAnimation()
