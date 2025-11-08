@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseAuth
 import NetworkExtension
+import CoreFoundation
 
 class HomeViewController: UIViewController
 {
@@ -33,7 +34,7 @@ class HomeViewController: UIViewController
             await updateUIState()
         }
     
-        addNotificationObserver()
+        addDarwinNotificationObservers()
     }
     
 }
@@ -297,9 +298,8 @@ extension HomeViewController
             if connected
             {
                 print("Stopping tunnel…")
-                //Start Stop Animation
+                self.powerButtonView.setState(.disconnecting)
                 await VPNManager.shared.stopTunnel()
-                //self.powerButtonView.setState(.disconnected)
             } else
             {
                 print("Starting tunnel…")
@@ -314,21 +314,42 @@ extension HomeViewController
 //MARK: - Notification
 extension HomeViewController: ObservableObject
 {
-    func addNotificationObserver()
-    {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(connectedAnimation),
-            name: .vpnDidConnect,
-            object: nil
-        )
-
-//        NotificationCenter.default.addObserver(
-//            self,
-//            selector: #selector(handleVPNNotification(_:)),
-//            name: .vpnDidDisconnect,
-//            object: nil
-//        )
+    func addDarwinNotificationObservers() {
+        let center = CFNotificationCenterGetDarwinNotifyCenter()
+        
+        // CONNECTED
+        CFNotificationCenterAddObserver(center,
+                                        UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque()),
+                                        { (_, observer, name, _, _) in
+            guard let observer = observer else { return }
+            let mySelf = Unmanaged<HomeViewController>.fromOpaque(observer).takeUnretainedValue()
+            DispatchQueue.main.async {
+                print("Received Darwin notification: \(name?.rawValue ?? "" as CFString)")
+                Task {
+                    await mySelf.setConnectionState()
+                }
+            }
+        },
+                                        "com.skylink.vpnConnected" as CFString,
+                                        nil,
+                                        .deliverImmediately)
+        
+        // DISCONNECTED
+        CFNotificationCenterAddObserver(center,
+                                        UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque()),
+                                        { (_, observer, name, _, _) in
+            guard let observer = observer else { return }
+            let mySelf = Unmanaged<HomeViewController>.fromOpaque(observer).takeUnretainedValue()
+            DispatchQueue.main.async {
+                print("Received Darwin notification: \(name?.rawValue ?? "" as CFString)")
+                Task {
+                    await mySelf.setConnectionState()
+                }
+            }
+        },
+                                        "com.skylink.vpnDisconnected" as CFString,
+                                        nil,
+                                        .deliverImmediately)
     }
 }
 
@@ -350,7 +371,8 @@ extension HomeViewController
         }
         else
         {
-            powerButtonView.setState(.connecting)
+            print("Running Disconnect Animation at home view")
+            powerButtonView.setState(.disconnected)
         }
       
     }
@@ -358,8 +380,27 @@ extension HomeViewController
     @objc func connectedAnimation()
     {
         print("Notification Received: Setting State to Connected")
-        DispatchQueue.main.async {
-            self.powerButtonView.setState(.connected)
+        
+        DispatchQueue.main.async
+        {
+            Task {
+               
+                self.powerButtonView.setState(.connected)
+                await self.setConnectionState()
+            }
+        }
+    }
+    
+    @objc private func disconnectedAnimation() {
+        print("Notification Received: Setting State to Disconnected")
+
+        DispatchQueue.main.async
+        {
+            self.powerButtonView.setState(.disconnecting)
+            Task {
+                self.powerButtonView.setState(.disconnected)
+                await self.setConnectionState()
+            }
         }
     }
     

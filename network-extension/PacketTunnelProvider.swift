@@ -5,7 +5,6 @@
 //  Created by Developer on 10/6/25.
 //
 
-
 import NetworkExtension
 import WireGuardKit
 
@@ -52,12 +51,15 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
             } else {
                 let interfaceName = self.adapter.interfaceName ?? "unknown"
                 self.log("Tunnel interface is \(interfaceName)")
+                self.notifyApp(.connected)
                 print("Hello World ")
                 //Start periodic stat reporting
                 //self.startStatsReportingLoop()
             }
             completionHandler(adapterError)
         }
+        
+        //self.notifyApp(.connected)
     }
     
     
@@ -74,6 +76,7 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
             
             // Stop stats reporting when tunnel disconnects
             self.statsTimer?.invalidate()
+            self.notifyApp(.disconnected)
             //self.saveStats(download: 0, upload: 0, isConnected: false)
             completionHandler()
 
@@ -82,6 +85,7 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
             exit(0)
             #endif
         }
+       
     }
 
     override func handleAppMessage(_ messageData: Data, completionHandler: ((Data?) -> Void)?) {
@@ -101,53 +105,24 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
     }
 }
 
-//extension PacketTunnelProvider
-//{
-//    
-//    private func startStatsReportingLoop() {
-//        statsTimer?.invalidate()
-//        statsTimer = Timer(timeInterval: 2.0, repeats: true) { [weak self] _ in
-//            guard let self = self else { return }
-//
-//            self.adapter.getRuntimeConfiguration { configTextOptional in
-//                guard let configText = configTextOptional else {
-//                    print("⚠️ getRuntimeConfiguration returned nil")
-//                    //self.saveStats(download: 0, upload: 0, isConnected: false)
-//                    return
-//                }
-//
-//                var rxBytes: Double = 0
-//                var txBytes: Double = 0
-//
-//                for line in configText.split(separator: "\n") {
-//                    if line.hasPrefix("rx_bytes=") || line.hasPrefix("transfer_rx=") {
-//                        rxBytes = Double(line
-//                            .replacingOccurrences(of: "rx_bytes=", with: "")
-//                            .replacingOccurrences(of: "transfer_rx=", with: "")
-//                        ) ?? 0
-//                    } else if line.hasPrefix("tx_bytes=") || line.hasPrefix("transfer_tx=") {
-//                        txBytes = Double(line
-//                            .replacingOccurrences(of: "tx_bytes=", with: "")
-//                            .replacingOccurrences(of: "transfer_tx=", with: "")
-//                        ) ?? 0
-//                    }
-//                }
-//
-//                let connected = (rxBytes > 0 || txBytes > 0)
-//                print("📈 [Tunnel] startStatsReportingLoop() firing...")
-//                print("📡 RX: \(rxBytes) bytes | TX: \(txBytes) bytes | Connected: \(connected)")
-//                //self.saveStats(download: rxBytes, upload: txBytes, isConnected: connected)
-//            }
-//        }
-//        RunLoop.main.add(statsTimer!, forMode: .common)
-//        }
-//    
-//    
-////    private func saveStats(download: Double, upload: Double, isConnected: Bool) {
-////        let defaults = UserDefaults(suiteName: "group.com.adebayosotannde.SkyLink")
-////        defaults?.set(download, forKey: "downloadSpeed")
-////        defaults?.set(upload, forKey: "uploadSpeed")
-////        defaults?.set(isConnected, forKey: "isConnected")
-////        defaults?.synchronize()
-////    }
-//}
+extension PacketTunnelProvider {
+    fileprivate enum VPNStatus {
+        case connected
+        case disconnected
+    }
+
+    fileprivate func notifyApp(_ status: VPNStatus) {
+        let center = CFNotificationCenterGetDarwinNotifyCenter()
+        let notificationName: CFString = (status == .connected)
+            ? "com.skylink.vpnConnected" as CFString
+            : "com.skylink.vpnDisconnected" as CFString
+
+        CFNotificationCenterPostNotification(center,
+                                             CFNotificationName(notificationName),
+                                             nil,
+                                             nil,
+                                             true)
+        log("Posted Darwin notification: \(notificationName)")
+    }
+}
+

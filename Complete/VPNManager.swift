@@ -11,7 +11,15 @@ import NetworkExtension
 
 final class VPNManager {
     static let shared = VPNManager()
-    private init() {}
+    
+    init() {
+//        NotificationCenter.default.addObserver(
+//            self,
+//            selector: #selector(vpnStatusDidChange),
+//            name: .NEVPNStatusDidChange,
+//            object: nil
+//        )
+    }
 
     private var manager: NETunnelProviderManager?
 
@@ -76,7 +84,7 @@ final class VPNManager {
             try await tunnelManager.connection.startVPNTunnel()
             self.manager = tunnelManager
             print("VPN Tunnel Started Successfully")
-            NotificationCenter.default.post(name: Notification.Name("vpnConnected"), object: nil)
+        
 
         } catch {
             print("[VPNManager] Failed to start tunnel: \(error.localizedDescription)")
@@ -92,11 +100,27 @@ final class VPNManager {
 
         connection.stopVPNTunnel()
         print("🛑 VPN Tunnel Stopped")
-        NotificationCenter.default.post(name: Notification.Name("vpnDisconnected"), object: nil)
+       
     }
     
-   
-
+//   
+//    @objc private func vpnStatusDidChange(_ notification: Notification) {
+//        guard let connection = manager?.connection else { return }
+//
+//        switch connection.status {
+//        case .connected:
+//            print("[VPNManager] System confirmed VPN is connected ✅")
+//            NotificationCenter.default.post(name: Notification.Name("vpnConnected"), object: nil)
+//
+//        case .disconnected, .invalid:
+//            print("[VPNManager] System confirmed VPN is disconnected 🛑")
+//            NotificationCenter.default.post(name: Notification.Name("vpnDisconnected"), object: nil)
+//
+//        default:
+//            break
+//        }
+//    }
+//    
     // MARK: - Helpers
     private func loadOrCreateTunnelProvider() async throws -> NETunnelProviderManager {
         let managers = try await NETunnelProviderManager.loadAllFromPreferences()
