@@ -22,6 +22,6 @@ extension Notification.Name
 import Foundation
 
 extension Notification.Name {
-    static let vpnDidConnect = Notification.Name("vpnDidConnect")
-    static let vpnDidDisconnect = Notification.Name("vpnDidDisconnect")
+    static let vpnDidConnect = Notification.Name("vpnConnected")
+    static let vpnDidDisconnect = Notification.Name("vpnDisconnected")
 }

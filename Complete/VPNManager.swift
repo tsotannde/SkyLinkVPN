@@ -76,6 +76,7 @@ final class VPNManager {
             try await tunnelManager.connection.startVPNTunnel()
             self.manager = tunnelManager
             print("VPN Tunnel Started Successfully")
+            NotificationCenter.default.post(name: Notification.Name("vpnConnected"), object: nil)
 
         } catch {
             print("[VPNManager] Failed to start tunnel: \(error.localizedDescription)")
@@ -91,6 +92,7 @@ final class VPNManager {
 
         connection.stopVPNTunnel()
         print("🛑 VPN Tunnel Stopped")
+        NotificationCenter.default.post(name: Notification.Name("vpnDisconnected"), object: nil)
     }
     
    

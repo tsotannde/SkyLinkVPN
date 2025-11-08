@@ -33,6 +33,7 @@ class HomeViewController: UIViewController
             await updateUIState()
         }
     
+        addNotificationObserver()
     }
     
 }
@@ -293,18 +294,41 @@ extension HomeViewController
             let connected = await VPNManager.shared.isConnectedToVPN()
             print("Current VPN status: \(connected ? "Connected" : "Disconnected")")
 
-            if connected {
+            if connected
+            {
                 print("Stopping tunnel…")
                 //Start Stop Animation
                 await VPNManager.shared.stopTunnel()
-                self.powerButtonView.setState(.disconnected)
-            } else {
+                //self.powerButtonView.setState(.disconnected)
+            } else
+            {
                 print("Starting tunnel…")
-                //Start Start Animation
+                self.powerButtonView.setState(.startTunnel)
                 await VPNManager.shared.startTunnel()
                
             }
         }
+    }
+}
+
+//MARK: - Notification
+extension HomeViewController: ObservableObject
+{
+    func addNotificationObserver()
+    {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(connectedAnimation),
+            name: .vpnDidConnect,
+            object: nil
+        )
+
+//        NotificationCenter.default.addObserver(
+//            self,
+//            selector: #selector(handleVPNNotification(_:)),
+//            name: .vpnDidDisconnect,
+//            object: nil
+//        )
     }
 }
 
@@ -326,9 +350,17 @@ extension HomeViewController
         }
         else
         {
-            powerButtonView.setState(.startTunnel)
+            powerButtonView.setState(.disconnected)
         }
       
+    }
+    
+    @objc func connectedAnimation()
+    {
+        print("Notification Received: Setting State to Connected")
+        DispatchQueue.main.async {
+            self.powerButtonView.setState(.connected)
+        }
     }
     
 }

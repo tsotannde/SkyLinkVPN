@@ -147,64 +147,64 @@ extension PowerButtonView
         innerCircle.layer.add(colorPulse, forKey: "connectedPulseInner")
     }
     
+   
+    
     private func connectingAnimation() {
-        // Set middleCircle background to a faint grey so white highlight arc is visible
         middleCircle.backgroundColor = UIColor.systemGray5.withAlphaComponent(0.4)
+        middleCircle.layer.sublayers?.removeAll(where: { $0.name == "spinnerLayer" })
         
-        // Remove any old loader layers from middleCircle
-        middleCircle.layer.sublayers?.removeAll(where: { $0.name == "baseCircle" || $0.name == "highlightArc" })
+        let radius = min(middleCircle.bounds.width, middleCircle.bounds.height) / 2 - 2
         
-        let middleCircleSize = middleCircle.bounds.size
-        let radius = middleCircleSize.width / 2 - 1.5
+        // Create spinner layer
+        let spinnerLayer = CAShapeLayer()
+        spinnerLayer.name = "spinnerLayer"
         
-        let center = CGPoint(x: middleCircle.bounds.midX, y: middleCircle.bounds.midY)
-        let startAngle = -CGFloat.pi / 2
-        let endAngle = startAngle + 2 * CGFloat.pi
+        // Create path at (0,0) since we'll position using anchorPoint
+        let path = UIBezierPath(
+            arcCenter: CGPoint(x: radius, y: radius), // Offset by radius
+            radius: radius,
+            startAngle: -(.pi / 2),
+            endAngle: .pi / 2,
+            clockwise: true
+        )
         
-        // Base circular stroke layer (light gray)
-        let baseCircle = CAShapeLayer()
-        baseCircle.name = "baseCircle"
-        baseCircle.path = UIBezierPath(arcCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true).cgPath
-        baseCircle.fillColor = UIColor.clear.cgColor
-        baseCircle.strokeColor = UIColor.systemGray3.cgColor
-        baseCircle.lineWidth = 4
-        baseCircle.lineCap = .round
+        spinnerLayer.path = path.cgPath
+        spinnerLayer.fillColor = UIColor.clear.cgColor
+        spinnerLayer.strokeColor = UIColor.white.cgColor
+        spinnerLayer.lineWidth = 3
+        spinnerLayer.lineCap = .round
+        spinnerLayer.strokeEnd = 1.0
         
-        // Highlight arc layer (white)
-        let highlightArc = CAShapeLayer()
-        highlightArc.name = "highlightArc"
-        highlightArc.path = baseCircle.path
-        highlightArc.fillColor = UIColor.clear.cgColor
-        highlightArc.strokeColor = UIColor.white.cgColor
-        highlightArc.lineWidth = 4
-        highlightArc.lineCap = .round
-        highlightArc.strokeStart = 0
-        highlightArc.strokeEnd = 0.2
+        // Set the frame and anchor point
+        spinnerLayer.bounds = CGRect(x: 0, y: 0, width: radius * 2, height: radius * 2)
+        spinnerLayer.position = CGPoint(x: middleCircle.bounds.midX, y: middleCircle.bounds.midY)
+        spinnerLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5) // Rotate around center
         
-        //middleCircle.layer.addSublayer(baseCircle)
-        middleCircle.layer.addSublayer(highlightArc)
+        middleCircle.layer.addSublayer(spinnerLayer)
         
-        // Animate strokeStart and strokeEnd to create traveling white edge
-        let animationDuration: CFTimeInterval = 1.5
+        // Rotate animation
+        let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        rotationAnimation.fromValue = 0
+        rotationAnimation.toValue = 2 * CGFloat.pi
+        rotationAnimation.duration = 1.5
+        rotationAnimation.repeatCount = .infinity
+        rotationAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
         
-        let strokeStartAnimation = CABasicAnimation(keyPath: "strokeStart")
-        strokeStartAnimation.fromValue = 0
-        strokeStartAnimation.toValue = 1
-        strokeStartAnimation.duration = animationDuration
-        strokeStartAnimation.repeatCount = .infinity
-        strokeStartAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
+        // Pulse animation
+        let pulseAnimation = CABasicAnimation(keyPath: "strokeEnd")
+        pulseAnimation.fromValue = 0.3
+        pulseAnimation.toValue = 0.7
+        pulseAnimation.duration = 0.8
+        pulseAnimation.autoreverses = true
+        pulseAnimation.repeatCount = .infinity
+        pulseAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         
-        let strokeEndAnimation = CABasicAnimation(keyPath: "strokeEnd")
-        strokeEndAnimation.fromValue = 0.2
-        strokeEndAnimation.toValue = 1.2
-        strokeEndAnimation.duration = animationDuration
-        strokeEndAnimation.repeatCount = .infinity
-        strokeEndAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
-        
-        highlightArc.add(strokeStartAnimation, forKey: "strokeStartAnimation")
-        highlightArc.add(strokeEndAnimation, forKey: "strokeEndAnimation")
+        spinnerLayer.add(rotationAnimation, forKey: "rotation")
+        spinnerLayer.add(pulseAnimation, forKey: "pulse")
     }
     
+   
+   
     private func disconnectedAnimation()
     {
         // Base colors for both circles
