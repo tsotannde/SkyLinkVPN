@@ -24,7 +24,7 @@ final class VPNManager {
     private var manager: NETunnelProviderManager?
 
     // MARK: - Start Tunnel
-    func startTunnel() async {
+    func startTunnel2() async {
         do {
             print("[VPNManager] Starting tunnel...")
 
@@ -91,19 +91,118 @@ final class VPNManager {
         }
     }
 
-     //MARK: - Stop Tunnel
-    func stopTunnel() async {
-        guard let connection = manager?.connection else {
-            print("No active tunnel to stop.")
-            return
+    func startTunnel()
+    {
+        print("[VPN Manager] Starting tunnel in background...")
+        Task.detached(priority: .userInitiated)
+        {
+            await self._startTunnelAsync()
         }
+    }
 
-        connection.stopVPNTunnel()
-        print("🛑 VPN Tunnel Stopped")
-       
+    private func _startTunnelAsync() async
+    {
+        do {
+            print("[VPNManager] Starting tunnel...")
+
+            //loads the server that will be used for connecting
+            guard let server = await ConfigurationManager.shared.getOrSelectServer() else
+            {
+                print("No server found.")
+                return
+            }
+            
+            //Req to make a request to firebase ie what server to send a request to
+            guard let serverIP = server.publicIP else
+            {
+                print("Server public IP is nil.")
+                return
+            }
+
+            #warning("Private key not really needed here")
+            guard let privateKey = KeyManager.shared.getPrivateKey(), let publicKey = KeyManager.shared.getPublicKey() else
+            {
+                print("Keys missing.")
+                return
+            }
+
+            //Send a Request to Firebase, Response is here
+            let response = try await FirebaseRequestManager.shared.sendRequest(
+                serverIP: serverIP,
+                serverPort: server.port ?? 5000,
+                publicKey: publicKey
+            )
+
+            print("[VPNManager] Received IP: \(response.ip), Port: \(response.port)")
+
+            print("[VPNManager] Creating VPN configuration...")
+            let wgQuickConfig = """
+            [Interface]
+            PrivateKey = \(privateKey)
+            Address = \(response.ip)/32
+            DNS = 1.1.1.1
+
+            [Peer]
+            PublicKey = \(response.publicKey)
+            Endpoint = \(server.publicIP ?? "0.0.0.0"):\(response.port)
+            AllowedIPs = 0.0.0.0/0
+            PersistentKeepalive = 25
+            """
+
+            print("[VPNManager] VPN Configuration Created \n\(wgQuickConfig)\n")
+            
+            print("[VPNManager] Using Configuration to establish a connection...")
+            let tunnelManager = try await self.loadOrCreateTunnelProvider()
+            tunnelManager.protocolConfiguration = self.makeProtocolConfig(wgQuickConfig: wgQuickConfig)
+            tunnelManager.localizedDescription = "SkyLink VPN" //Name that appears in VPN Settings
+            tunnelManager.isEnabled = true
+            try await tunnelManager.saveToPreferences()
+
+            try  tunnelManager.connection.startVPNTunnel()
+            self.manager = tunnelManager
+
+            print("[VPNManager] - VPN Tunnel Started Successfully")
+        } catch {
+            print("[VPNManager] Failed to start tunnel: \(error.localizedDescription)")
+        }
     }
     
-//   
+    
+     //MARK: - Stop Tunnel
+//    func stopTunnel()
+//    {
+//        guard let connection = manager?.connection else
+//        {
+//            print("No active tunnel to stop.")
+//            return
+//        }
+//
+//        connection.stopVPNTunnel()
+//        print("🛑 VPN Tunnel Stopped")
+//       
+//    }
+    
+    func stopTunnel() {
+        Task {
+            do {
+                let managers = try await NETunnelProviderManager.loadAllFromPreferences()
+                guard let active = managers.first else {
+                    print("[VPNManager] No saved tunnel found.")
+                    return
+                }
+
+                if active.connection.status == .connected || active.connection.status == .connecting {
+                    active.connection.stopVPNTunnel()
+                    print("[VPNManager] Stop request sent to system.")
+                } else {
+                    print("[VPNManager] Tunnel already disconnected.")
+                }
+            } catch {
+                print("[VPNManager] Stop failed: \(error)")
+            }
+        }
+    }
+//
 //    @objc private func vpnStatusDidChange(_ notification: Notification) {
 //        guard let connection = manager?.connection else { return }
 //
@@ -120,26 +219,34 @@ final class VPNManager {
 //            break
 //        }
 //    }
-//    
+//
     // MARK: - Helpers
-    private func loadOrCreateTunnelProvider() async throws -> NETunnelProviderManager {
+    private func loadOrCreateTunnelProvider() async throws -> NETunnelProviderManager
+    {
+        print("[VPNManager] Loading existing tunnel configurations from preferences...")
         let managers = try await NETunnelProviderManager.loadAllFromPreferences()
+        print("[VPNManager] Found \(managers.count) tunnel configuration(s).")
         if let existing = managers.first {
+            print("[VPNManager] Reusing existing tunnel configuration: \(existing.localizedDescription ?? "Unnamed")")
             return existing
         }
 
+        print("[VPNManager] No existing tunnel found. Creating a new one...")
         let newManager = NETunnelProviderManager()
         newManager.protocolConfiguration = makeProtocolConfig(wgQuickConfig: "")
         newManager.isEnabled = true
+        print("[VPNManager] New tunnel provider created and configured successfully.")
         return newManager
     }
 
     private func makeProtocolConfig(wgQuickConfig: String) -> NETunnelProviderProtocol
     {
+        print("[VPNManager] Building protocol configuration with WireGuard config...")
         let proto = NETunnelProviderProtocol()
         proto.providerBundleIdentifier = "com.adebayosotannde.SkyLink.network-extension"
         proto.serverAddress = "SkyLink VPN"
         proto.providerConfiguration = ["wgQuickConfig": wgQuickConfig]
+        print("[VPNManager] Protocol configuration completed with providerBundleIdentifier: \(proto.providerBundleIdentifier ?? "nil")")
         return proto
     }
 }

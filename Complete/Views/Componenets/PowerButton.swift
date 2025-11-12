@@ -117,7 +117,7 @@ extension PowerButtonView
             print("Disconnected Animation Started")
             disconnectedAnimation()
         case .connecting:
-            print("Start Tunnel")
+            print("[Power Button] Settting PowerButton to Connecting State ")
             connectingAnimation()
         case .disconnecting:
             print("Stop Tunnel")

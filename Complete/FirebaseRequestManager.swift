@@ -8,13 +8,15 @@
 import Foundation
 import FirebaseFunctions
 
-struct ServerResponse: Codable {
+struct ServerResponse: Codable
+{
     let ip: String
     let publicKey: String
     let port: Int
 }
 
-final class FirebaseRequestManager {
+final class FirebaseRequestManager
+{
     static let shared = FirebaseRequestManager()
     private init() {}
     
@@ -23,7 +25,9 @@ final class FirebaseRequestManager {
     /// Sends request to Firebase and returns structured server response
     func sendRequest(serverIP: String, serverPort: Int, publicKey: String) async throws -> ServerResponse
     {
-        do {
+        print("[FirebaseRequestManager] - Sending request to Firebase")
+        do
+        {
             let result = try await functions.httpsCallable("requestIPAddress").call([
                 "serverIP": serverIP,
                 "serverPort": serverPort,
@@ -38,7 +42,7 @@ final class FirebaseRequestManager {
                 )
             }
 
-            print("Full Firebase Response:", data)
+            print("[FirebaseRequestManager] - Full Firebase Response: \(data) \n" )
 
             // Match keys exactly with Firebase function response
             guard let ip = data["ip"] as? String,
@@ -51,10 +55,10 @@ final class FirebaseRequestManager {
                 )
             }
 
-            print("Received from Firebase — IP: \(ip), PubKey: \(serverPubKey), Port: \(port)")
+            print("[FirebaseRequestManager] -Received from Firebase — \n IP: \(ip), PubKey: \(serverPubKey), Port: \(port)")
             return ServerResponse(ip: ip, publicKey: serverPubKey, port: port)
         } catch {
-            print("❌ Firebase error: \(error.localizedDescription)")
+            print("[FirebaseRequestManager] -Firebase error: \(error.localizedDescription)")
             throw error
         }
     }

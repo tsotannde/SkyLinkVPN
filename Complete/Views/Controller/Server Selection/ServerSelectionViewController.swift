@@ -240,7 +240,8 @@ extension ServerSelectionViewController: UITableViewDelegate, UITableViewDataSou
         }
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
         let rows = isSearching ? filteredVisibleRows : visibleRows
         let sectionRows = rows.filter { $0.section == indexPath.section }
         let visibleRow = sectionRows[indexPath.row]
@@ -295,8 +296,11 @@ extension ServerSelectionViewController: UITableViewDelegate, UITableViewDataSou
             {
                 UserDefaults.standard.set(data, forKey: "currentServer")
             }
-            ConfigurationManager.shared.saveSelectedServer(server)
-            NotificationCenter.default.post(name: .serverDidUpdate, object: nil)
+            
+    
+            ConfigurationManager.shared.saveSelectedServer(server) //Save Conrrent configuration
+            NotificationCenter.default.post(name: .serverDidUpdate, object: nil)//Update HomeVc SelectedServer View
+            VPNManager.shared.stopTunnel() //Stop Tunnel if connected
             dismiss(animated: true)
         }
     }

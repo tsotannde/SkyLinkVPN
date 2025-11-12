@@ -196,9 +196,7 @@
 				EEFC0B492EBD902D0019629C /* AppDesign.swift */,
 				EE2D38142EAA97810010A30E /* ServerFetcherManager.swift */,
 				EE2D38132EAA97810010A30E /* NavigationManager.swift */,
-				EE2D381D2EAA97810010A30E /* ServerDatabase.swift */,
 				EEA05C6D2EB173F200AF703E /* StatCard.swift */,
-				EE2D38292EAA97810010A30E /* ServerSelectionViewController.swift */,
 				EE2D38122EAA97810010A30E /* KeyManager.swift */,
 				EE2D388C2EAC1B1E0010A30E /* VPNManager.swift */,
 				EE2D388E2EAC331B0010A30E /* FirebaseRequestManager.swift */,
@@ -226,6 +224,7 @@
 		EE2D387A2EAADB7D0010A30E /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				EE2D381D2EAA97810010A30E /* ServerDatabase.swift */,
 				EE2D387D2EAADBA40010A30E /* Country.swift */,
 				EE2D387B2EAADB970010A30E /* Server.swift */,
 			);
@@ -279,6 +278,7 @@
 		EE2D388B2EAC179C0010A30E /* Server Selection */ = {
 			isa = PBXGroup;
 			children = (
+				EE2D38292EAA97810010A30E /* ServerSelectionViewController.swift */,
 			);
 			path = "Server Selection";
 			sourceTree = "<group>";

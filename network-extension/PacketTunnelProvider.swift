@@ -48,11 +48,10 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
             guard let self = self else { return }
             if let adapterError = adapterError {
                 self.log("WireGuard adapter error: \(adapterError.localizedDescription)")
-            } else {
+            } else
+            {
                 let interfaceName = self.adapter.interfaceName ?? "unknown"
                 self.log("Tunnel interface is \(interfaceName)")
-                self.notifyApp(.connected)
-                print("Hello World ")
                 //Start periodic stat reporting
                 //self.startStatsReportingLoop()
             }
@@ -76,7 +75,6 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
             
             // Stop stats reporting when tunnel disconnects
             self.statsTimer?.invalidate()
-            self.notifyApp(.disconnected)
             //self.saveStats(download: 0, upload: 0, isConnected: false)
             completionHandler()
 
@@ -105,24 +103,4 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
     }
 }
 
-extension PacketTunnelProvider {
-    fileprivate enum VPNStatus {
-        case connected
-        case disconnected
-    }
-
-    fileprivate func notifyApp(_ status: VPNStatus) {
-        let center = CFNotificationCenterGetDarwinNotifyCenter()
-        let notificationName: CFString = (status == .connected)
-            ? "com.skylink.vpnConnected" as CFString
-            : "com.skylink.vpnDisconnected" as CFString
-
-        CFNotificationCenterPostNotification(center,
-                                             CFNotificationName(notificationName),
-                                             nil,
-                                             nil,
-                                             true)
-        log("Posted Darwin notification: \(notificationName)")
-    }
-}
 

@@ -21,6 +21,8 @@ class HomeViewController: UIViewController
     internal let selectedServerView = SelectedServer()
     internal let powerButtonView = PowerButtonView()
     
+    private var connectionCheckTimer: Timer?
+    
     
     override func viewDidLoad()
     {
@@ -28,13 +30,8 @@ class HomeViewController: UIViewController
         hideNavigationBar()
         setBackgroundColor()
         constructUserInterface()
-        
-        Task
-        {
-            await updateUIState()
-        }
-    
-        addDarwinNotificationObservers()
+        startTimer()
+        monitorNotifications() //Used to upadte the powerbutton state
     }
     
 }
@@ -254,6 +251,9 @@ extension HomeViewController
             powerButtonView.heightAnchor.constraint(equalToConstant: 80),
         ])
 
+        // Set an initial neutral animation before connection state is known
+        powerButtonView.setState(.disconnecting) // or .connecting if you prefer spinning blue
+        
         // Gesture for Power Button
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(powerButtonTapped))
         powerButtonView.addGestureRecognizer(tapGesture)
@@ -265,6 +265,7 @@ extension HomeViewController
 {
     @objc private func selectedServerTapped()
     {
+        print("[HomeViewController] Selected server tapped")
         let viewController = ServerSelectionViewController()
         
         if let sheet = viewController.sheetPresentationController
@@ -277,133 +278,123 @@ extension HomeViewController
             sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
         }
-
         present(viewController, animated: true, completion: nil)
     }
     
     @objc private func powerButtonTapped()
     {
-        print("Power button tapped")
-
-        Task { [weak self] in
+        print("[HomeViewController] Power button tapped")
+        Task
+        { [weak self] in
+            
             guard let self = self else { return }
 
-            // Prevent multiple taps
-            self.powerButtonView.isUserInteractionEnabled = false
+            self.powerButtonView.isUserInteractionEnabled = false // Prevent multiple taps
             defer { self.powerButtonView.isUserInteractionEnabled = true }
 
-            let connected = await VPNManager.shared.isConnectedToVPN()
-            print("Current VPN status: \(connected ? "Connected" : "Disconnected")")
+           // let connected = await VPNManager.shared.isConnectedToVPN()
+           // print("[HomeViewController] Current VPN status: \(connected ? "Connected" : "Disconnected")")
 
-            if connected
-            {
-                print("Stopping tunnel…")
-                self.powerButtonView.setState(.disconnecting)
-                await VPNManager.shared.stopTunnel()
-            } else
-            {
-                print("Starting tunnel…")
-                self.powerButtonView.setState(.connecting)
-                await VPNManager.shared.startTunnel()
-               
-            }
         }
     }
 }
 
-//MARK: - Notification
-extension HomeViewController: ObservableObject
-{
-    func addDarwinNotificationObservers() {
-        let center = CFNotificationCenterGetDarwinNotifyCenter()
-        
-        // CONNECTED
-        CFNotificationCenterAddObserver(center,
-                                        UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque()),
-                                        { (_, observer, name, _, _) in
-            guard let observer = observer else { return }
-            let mySelf = Unmanaged<HomeViewController>.fromOpaque(observer).takeUnretainedValue()
-            DispatchQueue.main.async {
-                print("Received Darwin notification: \(name?.rawValue ?? "" as CFString)")
-                Task {
-                    await mySelf.setConnectionState()
-                }
-            }
-        },
-                                        "com.skylink.vpnConnected" as CFString,
-                                        nil,
-                                        .deliverImmediately)
-        
-        // DISCONNECTED
-        CFNotificationCenterAddObserver(center,
-                                        UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque()),
-                                        { (_, observer, name, _, _) in
-            guard let observer = observer else { return }
-            let mySelf = Unmanaged<HomeViewController>.fromOpaque(observer).takeUnretainedValue()
-            DispatchQueue.main.async {
-                print("Received Darwin notification: \(name?.rawValue ?? "" as CFString)")
-                Task {
-                    await mySelf.setConnectionState()
-                }
-            }
-        },
-                                        "com.skylink.vpnDisconnected" as CFString,
-                                        nil,
-                                        .deliverImmediately)
-    }
-}
-
-//MARK: - Connection State
+//MARK: - Timer and Notifications
 extension HomeViewController
 {
-    func updateUIState() async
+    //MARK: - TIMER
+    func startTimer()
     {
-        await setConnectionState()
+        print("[HomeViewController] Starting Connection Check Timer")
+        // Start the timer to check connection state every 1 second
+        connectionCheckTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true)
+        { [weak self] _ in
+            
+            self?.checkConnectionState()
+        }
     }
     
-    func setConnectionState() async
+    // Timer-based connection state check, replaces Darwin notification updates
+    private func checkConnectionState()
     {
-        let connectionStatus = await VPNManager.shared.isConnectedToVPN()
-        connectionStatusView.setStatus(isConnected: connectionStatus)
-        if connectionStatus == true
-        {
-            powerButtonView.setState(.connected)
-        }
-        else
-        {
-            print("Running Disconnect Animation at home view")
-            powerButtonView.setState(.disconnected)
-        }
-      
-    }
-    
-    @objc func connectedAnimation()
-    {
-        print("Notification Received: Setting State to Connected")
-        
-        DispatchQueue.main.async
-        {
-            Task {
-               
-                self.powerButtonView.setState(.connected)
-                await self.setConnectionState()
+        print("[HomeViewController] Checking Connection State")
+        Task
+        { [weak self] in
+            guard let self = self else { return }
+            let connectionStatus = await VPNManager.shared.isConnectedToVPN()
+            print("[HomeViewController] Checked State: Current Connection State: \(connectionStatus)")
+            DispatchQueue.main.async
+            {
+                self.connectionStatusView.setStatus(isConnected: connectionStatus)
+                if connectionStatus
+                {
+                    self.powerButtonView.setState(.connected)
+                } else
+                {
+                    self.powerButtonView.setState(.disconnected)
+                }
             }
         }
     }
     
-    @objc private func disconnectedAnimation() {
-        print("Notification Received: Setting State to Disconnected")
+    //MARK: - Notifications
+    func monitorNotifications()
+    {
+        // --- Power Button State Notifications ---
+        NotificationCenter.default.addObserver(self, selector: #selector(handleVPNIsConnecting), name: .vpnIsConnecting, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleVPNDidConnect), name: .vpnDidConnect, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleVPNIsDisconnecting), name: .vpnIsDisconnecting, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleVPNDidDisconnect), name: .vpnDidDisconnect, object: nil)
 
-        DispatchQueue.main.async
-        {
-            self.powerButtonView.setState(.disconnecting)
-            Task {
-                self.powerButtonView.setState(.disconnected)
-                await self.setConnectionState()
-            }
-        }
+        // --- Server Update ---
+        NotificationCenter.default.addObserver(self, selector: #selector(handleServerDidUpdate), name: .serverDidUpdate, object: nil)
     }
     
+    @objc private func handleVPNDidConnect()
+       {
+           print("[HomeViewController] Notification: VPN Connected")
+           DispatchQueue.main.async {
+               self.powerButtonView.setState(.connected)
+           }
+       }
+       
+       @objc private func handleVPNDidDisconnect()
+       {
+           print("[HomeViewController] Notification: VPN Disconnected")
+           DispatchQueue.main.async {
+               self.powerButtonView.setState(.disconnected)
+           }
+       }
+       
+       @objc private func handleVPNIsConnecting()
+       {
+           print("[HomeViewController] Notification: VPN Connecting")
+           DispatchQueue.main.async {
+               self.powerButtonView.setState(.connecting)
+           }
+       }
+       
+       @objc private func handleVPNIsDisconnecting()
+       {
+           print("[HomeViewController] Notification: VPN Disconnecting")
+           DispatchQueue.main.async {
+               self.powerButtonView.setState(.disconnecting)
+           }
+       }
+    
+    @objc private func handleServerDidUpdate()
+    {
+        print("[HomeViewController] Updating Selected Server View")
+        Task { [weak self] in
+            //Current VPN Selected
+            let currentConfiguration = await ConfigurationManager.shared.getOrSelectServer()
+            
+            let country = currentConfiguration?.country ?? "United States"
+            let city = currentConfiguration?.city ?? "Invalid Configuration"
+            let state = currentConfiguration?.state ?? "Invalid Configuration"
+            
+            selectedServerView.configure(countryName: country, city: city, state: state)
+            
+        }
+    }
 }
-
-

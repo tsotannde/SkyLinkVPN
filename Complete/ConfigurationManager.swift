@@ -72,7 +72,7 @@ final class ConfigurationManager
         if let data = UserDefaults.standard.data(forKey: "currentServer"),
            let savedServer = try? JSONDecoder().decode(Server.self, from: data)
         {
-            print("Loaded previously selected server: \(savedServer.name)")
+            print("[ConfigurationManager] - Loaded previously selected server: \(savedServer.name)")
             return savedServer
         }
 
@@ -112,8 +112,9 @@ final class ConfigurationManager
             UserDefaults.standard.set(data, forKey: "currentServer")
             print("✅ Saved selected server: \(server.name)")
             
-            // Notify any observers that the selected server changed
-            NotificationCenter.default.post(name: .serverDidUpdate, object: server)
+         
+                NotificationCenter.default.post(name: .serverDidUpdate, object: server)
+            
         }
     }
 }
