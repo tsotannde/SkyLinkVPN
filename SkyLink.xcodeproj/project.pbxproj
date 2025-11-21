@@ -30,6 +30,20 @@
 		EE2D38802EABE6CF0010A30E /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D387F2EABE6CF0010A30E /* AccountManager.swift */; };
 		EE2D388D2EAC1B1E0010A30E /* VPNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D388C2EAC1B1E0010A30E /* VPNManager.swift */; };
 		EE2D388F2EAC331B0010A30E /* FirebaseRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D388E2EAC331B0010A30E /* FirebaseRequestManager.swift */; };
+		EE692D492ECFA39100EAC07B /* CountryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE692D292ECFA39100EAC07B /* CountryCell.swift */; };
+		EE692D4A2ECFA39100EAC07B /* ServerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE692D2A2ECFA39100EAC07B /* ServerCell.swift */; };
+		EE692D4B2ECFA39100EAC07B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE692D2C2ECFA39100EAC07B /* AppDelegate.swift */; };
+		EE692D4C2ECFA39100EAC07B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE692D2D2ECFA39100EAC07B /* SceneDelegate.swift */; };
+		EE692D4D2ECFA39100EAC07B /* InternetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE692D302ECFA39100EAC07B /* InternetManager.swift */; };
+		EE692D4F2ECFA39100EAC07B /* SubscribeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE692D3A2ECFA39100EAC07B /* SubscribeViewController.swift */; };
+		EE692D522ECFA39100EAC07B /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE692D422ECFA39100EAC07B /* DesignSystem.swift */; };
+		EE692D532ECFA39100EAC07B /* TODO.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE692D482ECFA39100EAC07B /* TODO.swift */; };
+		EE692D542ECFA39100EAC07B /* libwg-go.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE692D452ECFA39100EAC07B /* libwg-go.a */; };
+		EE692D572ECFA39100EAC07B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE692D412ECFA39100EAC07B /* Assets.xcassets */; };
+		EE692D582ECFA39100EAC07B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE692D432ECFA39100EAC07B /* GoogleService-Info.plist */; };
+		EE692D5A2ECFA39100EAC07B /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = EE692D462ECFA39100EAC07B /* Localizable.xcstrings */; };
+		EE692D5B2ECFA39100EAC07B /* libwg-go.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE692D452ECFA39100EAC07B /* libwg-go.a */; };
+		EE853B7C2EC1285D00EC6430 /* TapbackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE853B572EC1285D00EC6430 /* TapbackManager.swift */; };
 		EEA05C8C2EB173F200AF703E /* StatCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA05C6D2EB173F200AF703E /* StatCard.swift */; };
 		EEB9F43E2EB3F69A008C1651 /* ConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9F43D2EB3F69A008C1651 /* ConnectionStatus.swift */; };
 		EEB9F4402EB3F6AB008C1651 /* PowerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9F43F2EB3F6AB008C1651 /* PowerButton.swift */; };
@@ -84,6 +98,21 @@
 		EE2D387F2EABE6CF0010A30E /* AccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
 		EE2D388C2EAC1B1E0010A30E /* VPNManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNManager.swift; sourceTree = "<group>"; };
 		EE2D388E2EAC331B0010A30E /* FirebaseRequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseRequestManager.swift; sourceTree = "<group>"; };
+		EE692D292ECFA39100EAC07B /* CountryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCell.swift; sourceTree = "<group>"; };
+		EE692D2A2ECFA39100EAC07B /* ServerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerCell.swift; sourceTree = "<group>"; };
+		EE692D2C2ECFA39100EAC07B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		EE692D2D2ECFA39100EAC07B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		EE692D302ECFA39100EAC07B /* InternetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternetManager.swift; sourceTree = "<group>"; };
+		EE692D3A2ECFA39100EAC07B /* SubscribeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribeViewController.swift; sourceTree = "<group>"; };
+		EE692D412ECFA39100EAC07B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		EE692D422ECFA39100EAC07B /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+		EE692D432ECFA39100EAC07B /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		EE692D442ECFA39100EAC07B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EE692D452ECFA39100EAC07B /* libwg-go.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libwg-go.a"; sourceTree = "<group>"; };
+		EE692D462ECFA39100EAC07B /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		EE692D472ECFA39100EAC07B /* SkyLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SkyLink.entitlements; sourceTree = "<group>"; };
+		EE692D482ECFA39100EAC07B /* TODO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TODO.swift; sourceTree = "<group>"; };
+		EE853B572EC1285D00EC6430 /* TapbackManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapbackManager.swift; sourceTree = "<group>"; };
 		EEA05C6D2EB173F200AF703E /* StatCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatCard.swift; sourceTree = "<group>"; };
 		EEB9F43D2EB3F69A008C1651 /* ConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionStatus.swift; sourceTree = "<group>"; };
 		EEB9F43F2EB3F6AB008C1651 /* PowerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerButton.swift; sourceTree = "<group>"; };
@@ -94,13 +123,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		8B9F51522E948BE2005EA0D0 /* Exceptions for "SkyLink" folder in "SkyLink" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 8B9F513F2E948BE0005EA0D0 /* SkyLink */;
-		};
 		8B9F516B2E948C05005EA0D0 /* Exceptions for "network-extension" folder in "network-extension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -108,31 +130,30 @@
 			);
 			target = 8B9F515B2E948C05005EA0D0 /* network-extension */;
 		};
-		8B9F51812E949272005EA0D0 /* Exceptions for "SkyLink" folder in "network-extension" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"libwg-go.a",
-			);
-			target = 8B9F515B2E948C05005EA0D0 /* network-extension */;
-		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		8B9F51422E948BE0005EA0D0 /* SkyLink */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				8B9F51522E948BE2005EA0D0 /* Exceptions for "SkyLink" folder in "SkyLink" target */,
-				8B9F51812E949272005EA0D0 /* Exceptions for "SkyLink" folder in "network-extension" target */,
-			);
-			path = SkyLink;
-			sourceTree = "<group>";
-		};
 		8B9F51602E948C05005EA0D0 /* network-extension */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				8B9F516B2E948C05005EA0D0 /* Exceptions for "network-extension" folder in "network-extension" target */,
 			);
 			path = "network-extension";
+			sourceTree = "<group>";
+		};
+		EE692D6A2ECFA43400EAC07B /* StoryBoard */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = StoryBoard;
+			sourceTree = "<group>";
+		};
+		EE692D6E2ECFA47600EAC07B /* WireGuard */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = WireGuard;
+			sourceTree = "<group>";
+		};
+		EE692D712ECFA4FA00EAC07B /* New Folder */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "New Folder";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -143,6 +164,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B130DE82E967ADF004DC087 /* Hero in Frameworks */,
+				EE692D542ECFA39100EAC07B /* libwg-go.a in Frameworks */,
 				8BE5BFBA2E9786D7003DDC65 /* FirebaseFirestore in Frameworks */,
 				8BE5BFC22E97C292003DDC65 /* FirebaseFunctions in Frameworks */,
 				8B130DE12E96763B004DC087 /* SimplifiedAuthKit in Frameworks */,
@@ -155,6 +177,7 @@
 			files = (
 				8B9F51732E948C80005EA0D0 /* WireGuardKit in Frameworks */,
 				8B9F515F2E948C05005EA0D0 /* NetworkExtension.framework in Frameworks */,
+				EE692D5B2ECFA39100EAC07B /* libwg-go.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,8 +187,25 @@
 		8B9F51372E948BE0005EA0D0 = {
 			isa = PBXGroup;
 			children = (
-				EE2D38762EAAD4AD0010A30E /* Complete */,
-				8B9F51422E948BE0005EA0D0 /* SkyLink */,
+				EE692D712ECFA4FA00EAC07B /* New Folder */,
+				EE692D6E2ECFA47600EAC07B /* WireGuard */,
+				EEFC0B0C2EBD6B2B0019629C /* NotificationCenter.swift */,
+				EE692D472ECFA39100EAC07B /* SkyLink.entitlements */,
+				EEFC0B492EBD902D0019629C /* AppDesign.swift */,
+				EE692D442ECFA39100EAC07B /* Info.plist */,
+				EE692D432ECFA39100EAC07B /* GoogleService-Info.plist */,
+				EE692D482ECFA39100EAC07B /* TODO.swift */,
+				EE692D422ECFA39100EAC07B /* DesignSystem.swift */,
+				EE692D452ECFA39100EAC07B /* libwg-go.a */,
+				EE692D412ECFA39100EAC07B /* Assets.xcassets */,
+				EE692D462ECFA39100EAC07B /* Localizable.xcstrings */,
+				EE692D6A2ECFA43400EAC07B /* StoryBoard */,
+				EEFC0B4D2EBDADDC0019629C /* Assets */,
+				EE2D38852EABF8870010A30E /* Views */,
+				EE2D387A2EAADB7D0010A30E /* Models */,
+				EE2D38772EAAD57B0010A30E /* Managers */,
+				EE692D682ECFA3E400EAC07B /* Cells */,
+				EE692D692ECFA3F600EAC07B /* Delgate */,
 				8B9F51602E948C05005EA0D0 /* network-extension */,
 				8B9F515D2E948C05005EA0D0 /* Frameworks */,
 				8B9F51412E948BE0005EA0D0 /* Products */,
@@ -190,32 +230,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		EE2D38762EAAD4AD0010A30E /* Complete */ = {
-			isa = PBXGroup;
-			children = (
-				EEFC0B492EBD902D0019629C /* AppDesign.swift */,
-				EE2D38142EAA97810010A30E /* ServerFetcherManager.swift */,
-				EE2D38132EAA97810010A30E /* NavigationManager.swift */,
-				EEA05C6D2EB173F200AF703E /* StatCard.swift */,
-				EE2D38122EAA97810010A30E /* KeyManager.swift */,
-				EE2D388C2EAC1B1E0010A30E /* VPNManager.swift */,
-				EE2D388E2EAC331B0010A30E /* FirebaseRequestManager.swift */,
-				EE2D38102EAA97810010A30E /* ConfigurationManager.swift */,
-				EE2D38152EAA97810010A30E /* SubscriptionManager.swift */,
-				EE2D382C2EAA97810010A30E /* SplashViewController.swift */,
-				EE2D387F2EABE6CF0010A30E /* AccountManager.swift */,
-				EEFC0B0C2EBD6B2B0019629C /* NotificationCenter.swift */,
-				EE2D38772EAAD57B0010A30E /* Managers */,
-				EE2D387A2EAADB7D0010A30E /* Models */,
-				EE2D38852EABF8870010A30E /* Views */,
-				EEFC0B4D2EBDADDC0019629C /* Assets */,
-			);
-			path = Complete;
-			sourceTree = "<group>";
-		};
 		EE2D38772EAAD57B0010A30E /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				EE2D38132EAA97810010A30E /* NavigationManager.swift */,
+				EE2D38102EAA97810010A30E /* ConfigurationManager.swift */,
+				EE692D302ECFA39100EAC07B /* InternetManager.swift */,
+				EE2D388E2EAC331B0010A30E /* FirebaseRequestManager.swift */,
+				EE2D38122EAA97810010A30E /* KeyManager.swift */,
+				EE853B572EC1285D00EC6430 /* TapbackManager.swift */,
+				EE2D38152EAA97810010A30E /* SubscriptionManager.swift */,
+				EE2D38142EAA97810010A30E /* ServerFetcherManager.swift */,
+				EE2D387F2EABE6CF0010A30E /* AccountManager.swift */,
+				EE2D388C2EAC1B1E0010A30E /* VPNManager.swift */,
 				EE2D38732EAAD4990010A30E /* FlagManager.swift */,
 			);
 			path = Managers;
@@ -243,6 +270,7 @@
 		EE2D38862EABF8940010A30E /* Componenets */ = {
 			isa = PBXGroup;
 			children = (
+				EEA05C6D2EB173F200AF703E /* StatCard.swift */,
 				EEB9F43F2EB3F6AB008C1651 /* PowerButton.swift */,
 				EEB9F43D2EB3F69A008C1651 /* ConnectionStatus.swift */,
 				EE2D38212EAA97810010A30E /* SelectedServer.swift */,
@@ -253,6 +281,7 @@
 		EE2D38872EAC00C80010A30E /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				EE692D6B2ECFA45C00EAC07B /* Subscribe */,
 				EE2D38882EAC00D70010A30E /* Splash */,
 				EE2D388A2EAC01F90010A30E /* Home */,
 				EE2D388B2EAC179C0010A30E /* Server Selection */,
@@ -263,6 +292,7 @@
 		EE2D38882EAC00D70010A30E /* Splash */ = {
 			isa = PBXGroup;
 			children = (
+				EE2D382C2EAA97810010A30E /* SplashViewController.swift */,
 			);
 			path = Splash;
 			sourceTree = "<group>";
@@ -281,6 +311,32 @@
 				EE2D38292EAA97810010A30E /* ServerSelectionViewController.swift */,
 			);
 			path = "Server Selection";
+			sourceTree = "<group>";
+		};
+		EE692D682ECFA3E400EAC07B /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				EE692D292ECFA39100EAC07B /* CountryCell.swift */,
+				EE692D2A2ECFA39100EAC07B /* ServerCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		EE692D692ECFA3F600EAC07B /* Delgate */ = {
+			isa = PBXGroup;
+			children = (
+				EE692D2C2ECFA39100EAC07B /* AppDelegate.swift */,
+				EE692D2D2ECFA39100EAC07B /* SceneDelegate.swift */,
+			);
+			path = Delgate;
+			sourceTree = "<group>";
+		};
+		EE692D6B2ECFA45C00EAC07B /* Subscribe */ = {
+			isa = PBXGroup;
+			children = (
+				EE692D3A2ECFA39100EAC07B /* SubscribeViewController.swift */,
+			);
+			path = Subscribe;
 			sourceTree = "<group>";
 		};
 		EEFC0B4D2EBDADDC0019629C /* Assets */ = {
@@ -329,7 +385,9 @@
 				8B9F51662E948C05005EA0D0 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				8B9F51422E948BE0005EA0D0 /* SkyLink */,
+				EE692D6A2ECFA43400EAC07B /* StoryBoard */,
+				EE692D6E2ECFA47600EAC07B /* WireGuard */,
+				EE692D712ECFA4FA00EAC07B /* New Folder */,
 			);
 			name = SkyLink;
 			packageProductDependencies = (
@@ -419,6 +477,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				EEB9F4782EB42942008C1651 /* Sora-Regular.ttf in Resources */,
+				EE692D572ECFA39100EAC07B /* Assets.xcassets in Resources */,
+				EE692D582ECFA39100EAC07B /* GoogleService-Info.plist in Resources */,
+				EE692D5A2ECFA39100EAC07B /* Localizable.xcstrings in Resources */,
 				EEB9F4792EB42942008C1651 /* Sora-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -437,9 +498,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE853B7C2EC1285D00EC6430 /* TapbackManager.swift in Sources */,
 				EE2D38752EAAD4990010A30E /* FlagManager.swift in Sources */,
 				EEFC0B332EBD6B2B0019629C /* NotificationCenter.swift in Sources */,
 				EE2D38802EABE6CF0010A30E /* AccountManager.swift in Sources */,
+				EE692D492ECFA39100EAC07B /* CountryCell.swift in Sources */,
+				EE692D4A2ECFA39100EAC07B /* ServerCell.swift in Sources */,
+				EE692D4B2ECFA39100EAC07B /* AppDelegate.swift in Sources */,
+				EE692D4C2ECFA39100EAC07B /* SceneDelegate.swift in Sources */,
+				EE692D4D2ECFA39100EAC07B /* InternetManager.swift in Sources */,
+				EE692D4F2ECFA39100EAC07B /* SubscribeViewController.swift in Sources */,
+				EE692D522ECFA39100EAC07B /* DesignSystem.swift in Sources */,
+				EE692D532ECFA39100EAC07B /* TODO.swift in Sources */,
 				EE2D388F2EAC331B0010A30E /* FirebaseRequestManager.swift in Sources */,
 				EE2D38412EAA97810010A30E /* ConfigurationManager.swift in Sources */,
 				EEB9F43E2EB3F69A008C1651 /* ConnectionStatus.swift in Sources */,

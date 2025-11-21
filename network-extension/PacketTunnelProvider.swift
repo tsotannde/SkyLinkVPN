@@ -8,57 +8,67 @@
 import NetworkExtension
 import WireGuardKit
 
-enum PacketTunnelProviderError: String, Error {
+enum PacketTunnelProviderError: String, Error
+{
     case invalidProtocolConfiguration
     case cantParseWgQuickConfig
 }
 
-class PacketTunnelProvider: NEPacketTunnelProvider {
+class PacketTunnelProvider: NEPacketTunnelProvider
+{
 
     private var statsTimer: Timer?
     
     
-    private lazy var adapter: WireGuardAdapter = {
+    private lazy var adapter: WireGuardAdapter =
+    {
         return WireGuardAdapter(with: self) { [weak self] _, message in
             self?.log(message)
         }
     }()
 
-    func log(_ message: String) {
+    func log(_ message: String)
+    {
         NSLog("WireGuard Tunnel: %@\n", message)
     }
 
-    override func startTunnel(options: [String : NSObject]?, completionHandler: @escaping (Error?) -> Void) {
+    override func startTunnel(options: [String : NSObject]?, completionHandler: @escaping (Error?) -> Void)
+    {
         log("Starting tunnel")
         guard let protocolConfiguration = self.protocolConfiguration as? NETunnelProviderProtocol,
               let providerConfiguration = protocolConfiguration.providerConfiguration,
-              let wgQuickConfig = providerConfiguration["wgQuickConfig"] as? String else {
+              let wgQuickConfig = providerConfiguration["wgQuickConfig"] as? String else
+        {
             log("Invalid provider configuration")
             completionHandler(PacketTunnelProviderError.invalidProtocolConfiguration)
             return
         }
 
-        guard let tunnelConfiguration = try? TunnelConfiguration(fromWgQuickConfig: wgQuickConfig) else {
+        guard let tunnelConfiguration = try? TunnelConfiguration(fromWgQuickConfig: wgQuickConfig) else
+        {
             log("wg-quick config not parseable")
             completionHandler(PacketTunnelProviderError.cantParseWgQuickConfig)
             return
         }
 
-        adapter.start(tunnelConfiguration: tunnelConfiguration) { [weak self] adapterError in
+        adapter.start(tunnelConfiguration: tunnelConfiguration)
+        { [weak self] adapterError in
             guard let self = self else { return }
-            if let adapterError = adapterError {
+            if let adapterError = adapterError
+            {
                 self.log("WireGuard adapter error: \(adapterError.localizedDescription)")
-            } else
+            }
+            else
             {
                 let interfaceName = self.adapter.interfaceName ?? "unknown"
                 self.log("Tunnel interface is \(interfaceName)")
-                //Start periodic stat reporting
-                //self.startStatsReportingLoop()
+                
+                //Periodic Reporting
+                self.startStatsReportingLoop()
+             
             }
             completionHandler(adapterError)
         }
-        
-        //self.notifyApp(.connected)
     }
     
     
@@ -75,7 +85,8 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
             
             // Stop stats reporting when tunnel disconnects
             self.statsTimer?.invalidate()
-            //self.saveStats(download: 0, upload: 0, isConnected: false)
+            //clear stale values
+            self.clearStatsOnDisconnect()
             completionHandler()
 
             #if os(macOS)
@@ -103,4 +114,53 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
     }
 }
 
+extension PacketTunnelProvider {
+    
+    private func startStatsReportingLoop()
+    {
+        statsTimer?.invalidate()
+        statsTimer = Timer(timeInterval: 2.0, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
 
+            self.adapter.getRuntimeConfiguration { configTextOptional in
+                guard let configText = configTextOptional else {
+                    print("getRuntimeConfiguration returned nil")
+                    return
+                }
+
+                var rxBytes: Double = 0
+                var txBytes: Double = 0
+
+                for line in configText.split(separator: "\n") {
+                    if line.hasPrefix("rx_bytes=") || line.hasPrefix("transfer_rx=") {
+                        rxBytes = Double(line
+                            .replacingOccurrences(of: "rx_bytes=", with: "")
+                            .replacingOccurrences(of: "transfer_rx=", with: "")
+                        ) ?? 0
+                    } else if line.hasPrefix("tx_bytes=") || line.hasPrefix("transfer_tx=") {
+                        txBytes = Double(line
+                            .replacingOccurrences(of: "tx_bytes=", with: "")
+                            .replacingOccurrences(of: "transfer_tx=", with: "")
+                        ) ?? 0
+                    }
+                }
+
+                let defaults = UserDefaults(suiteName: "group.com.adebayosotannde.SkyLink")
+                defaults?.set(rxBytes, forKey: "downloadSpeed")
+                defaults?.set(txBytes, forKey: "uploadSpeed")
+                defaults?.synchronize()
+
+                print("RX: \(rxBytes) bytes | TX: \(txBytes) bytes")
+            }
+        }
+        RunLoop.main.add(statsTimer!, forMode: .common)
+    }
+    
+    private func clearStatsOnDisconnect() {
+        let defaults = UserDefaults(suiteName: "group.com.adebayosotannde.SkyLink")
+        defaults?.set(0.0, forKey: "downloadSpeed")
+        defaults?.set(0.0, forKey: "uploadSpeed")
+        defaults?.synchronize()
+        print("[PacketTunnelProvider] Cleared shared stats (download/upload reset to 0)")
+    }
+}
