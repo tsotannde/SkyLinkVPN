@@ -38,11 +38,8 @@
 		EE692D4F2ECFA39100EAC07B /* SubscribeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE692D3A2ECFA39100EAC07B /* SubscribeViewController.swift */; };
 		EE692D522ECFA39100EAC07B /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE692D422ECFA39100EAC07B /* DesignSystem.swift */; };
 		EE692D532ECFA39100EAC07B /* TODO.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE692D482ECFA39100EAC07B /* TODO.swift */; };
-		EE692D542ECFA39100EAC07B /* libwg-go.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE692D452ECFA39100EAC07B /* libwg-go.a */; };
 		EE692D572ECFA39100EAC07B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE692D412ECFA39100EAC07B /* Assets.xcassets */; };
-		EE692D582ECFA39100EAC07B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE692D432ECFA39100EAC07B /* GoogleService-Info.plist */; };
 		EE692D5A2ECFA39100EAC07B /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = EE692D462ECFA39100EAC07B /* Localizable.xcstrings */; };
-		EE692D5B2ECFA39100EAC07B /* libwg-go.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE692D452ECFA39100EAC07B /* libwg-go.a */; };
 		EE853B7C2EC1285D00EC6430 /* TapbackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE853B572EC1285D00EC6430 /* TapbackManager.swift */; };
 		EEA05C8C2EB173F200AF703E /* StatCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA05C6D2EB173F200AF703E /* StatCard.swift */; };
 		EEB9F43E2EB3F69A008C1651 /* ConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9F43D2EB3F69A008C1651 /* ConnectionStatus.swift */; };
@@ -106,11 +103,7 @@
 		EE692D3A2ECFA39100EAC07B /* SubscribeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribeViewController.swift; sourceTree = "<group>"; };
 		EE692D412ECFA39100EAC07B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EE692D422ECFA39100EAC07B /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
-		EE692D432ECFA39100EAC07B /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		EE692D442ECFA39100EAC07B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EE692D452ECFA39100EAC07B /* libwg-go.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libwg-go.a"; sourceTree = "<group>"; };
 		EE692D462ECFA39100EAC07B /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
-		EE692D472ECFA39100EAC07B /* SkyLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SkyLink.entitlements; sourceTree = "<group>"; };
 		EE692D482ECFA39100EAC07B /* TODO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TODO.swift; sourceTree = "<group>"; };
 		EE853B572EC1285D00EC6430 /* TapbackManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapbackManager.swift; sourceTree = "<group>"; };
 		EEA05C6D2EB173F200AF703E /* StatCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatCard.swift; sourceTree = "<group>"; };
@@ -130,6 +123,20 @@
 			);
 			target = 8B9F515B2E948C05005EA0D0 /* network-extension */;
 		};
+		EE2C108A2ED0FF0000B589FE /* Exceptions for "SkyLink" folder in "network-extension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"libwg-go.a",
+			);
+			target = 8B9F515B2E948C05005EA0D0 /* network-extension */;
+		};
+		EE2C108B2ED0FF8200B589FE /* Exceptions for "SkyLink" folder in "SkyLink" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 8B9F513F2E948BE0005EA0D0 /* SkyLink */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -141,19 +148,18 @@
 			path = "network-extension";
 			sourceTree = "<group>";
 		};
-		EE692D6A2ECFA43400EAC07B /* StoryBoard */ = {
+		EE2C10822ED0FEDB00B589FE /* SkyLink */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = StoryBoard;
+			exceptions = (
+				EE2C108B2ED0FF8200B589FE /* Exceptions for "SkyLink" folder in "SkyLink" target */,
+				EE2C108A2ED0FF0000B589FE /* Exceptions for "SkyLink" folder in "network-extension" target */,
+			);
+			path = SkyLink;
 			sourceTree = "<group>";
 		};
 		EE692D6E2ECFA47600EAC07B /* WireGuard */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = WireGuard;
-			sourceTree = "<group>";
-		};
-		EE692D712ECFA4FA00EAC07B /* New Folder */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "New Folder";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -164,7 +170,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B130DE82E967ADF004DC087 /* Hero in Frameworks */,
-				EE692D542ECFA39100EAC07B /* libwg-go.a in Frameworks */,
 				8BE5BFBA2E9786D7003DDC65 /* FirebaseFirestore in Frameworks */,
 				8BE5BFC22E97C292003DDC65 /* FirebaseFunctions in Frameworks */,
 				8B130DE12E96763B004DC087 /* SimplifiedAuthKit in Frameworks */,
@@ -177,7 +182,6 @@
 			files = (
 				8B9F51732E948C80005EA0D0 /* WireGuardKit in Frameworks */,
 				8B9F515F2E948C05005EA0D0 /* NetworkExtension.framework in Frameworks */,
-				EE692D5B2ECFA39100EAC07B /* libwg-go.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -187,19 +191,14 @@
 		8B9F51372E948BE0005EA0D0 = {
 			isa = PBXGroup;
 			children = (
-				EE692D712ECFA4FA00EAC07B /* New Folder */,
+				EE2C10822ED0FEDB00B589FE /* SkyLink */,
 				EE692D6E2ECFA47600EAC07B /* WireGuard */,
 				EEFC0B0C2EBD6B2B0019629C /* NotificationCenter.swift */,
-				EE692D472ECFA39100EAC07B /* SkyLink.entitlements */,
 				EEFC0B492EBD902D0019629C /* AppDesign.swift */,
-				EE692D442ECFA39100EAC07B /* Info.plist */,
-				EE692D432ECFA39100EAC07B /* GoogleService-Info.plist */,
 				EE692D482ECFA39100EAC07B /* TODO.swift */,
 				EE692D422ECFA39100EAC07B /* DesignSystem.swift */,
-				EE692D452ECFA39100EAC07B /* libwg-go.a */,
 				EE692D412ECFA39100EAC07B /* Assets.xcassets */,
 				EE692D462ECFA39100EAC07B /* Localizable.xcstrings */,
-				EE692D6A2ECFA43400EAC07B /* StoryBoard */,
 				EEFC0B4D2EBDADDC0019629C /* Assets */,
 				EE2D38852EABF8870010A30E /* Views */,
 				EE2D387A2EAADB7D0010A30E /* Models */,
@@ -385,9 +384,8 @@
 				8B9F51662E948C05005EA0D0 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				EE692D6A2ECFA43400EAC07B /* StoryBoard */,
+				EE2C10822ED0FEDB00B589FE /* SkyLink */,
 				EE692D6E2ECFA47600EAC07B /* WireGuard */,
-				EE692D712ECFA4FA00EAC07B /* New Folder */,
 			);
 			name = SkyLink;
 			packageProductDependencies = (
@@ -478,7 +476,6 @@
 			files = (
 				EEB9F4782EB42942008C1651 /* Sora-Regular.ttf in Resources */,
 				EE692D572ECFA39100EAC07B /* Assets.xcassets in Resources */,
-				EE692D582ECFA39100EAC07B /* GoogleService-Info.plist in Resources */,
 				EE692D5A2ECFA39100EAC07B /* Localizable.xcstrings in Resources */,
 				EEB9F4792EB42942008C1651 /* Sora-SemiBold.ttf in Resources */,
 			);
